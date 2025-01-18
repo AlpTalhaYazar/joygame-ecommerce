@@ -34,6 +34,27 @@
         </ul>
       </li>
     </ul>
+    <div class="user-profile-section" [class.collapsed]="isCollapsed">
+      <!-- Show when user is not logged in -->
+      <div *ngIf="!isLoggedIn" class="login-section">
+        <button nz-button nzType="primary" (click)="login()">
+          <span nz-icon nzType="login"></span>
+          <span *ngIf="!isCollapsed">Login</span>
+        </button>
+      </div>
+
+      <!-- Show when user is logged in -->
+      <div *ngIf="isLoggedIn" class="profile-section">
+        <div class="user-info" [class.collapsed]="isCollapsed">
+          <nz-avatar [nzSize]="32" nzIcon="user" [nzSrc]="userPhotoUrl"></nz-avatar>
+          <span class="username" *ngIf="!isCollapsed">{{ userName }}</span>
+        </div>
+        <button nz-button nzType="link" (click)="logout()" class="logout-button">
+          <span nz-icon nzType="logout"></span>
+          <span *ngIf="!isCollapsed">Logout</span>
+        </button>
+      </div>
+    </div>
   </nz-sider>
   <nz-layout>
     <nz-header>
