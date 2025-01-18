@@ -10,7 +10,7 @@ export const routes: Routes = [
       import('./features/landing/landing.module').then((m) => m.LandingModule),
   },
   {
-    path: 'auth',
+    path: '',
     loadChildren: () =>
       import('./features/auth/auth.module').then((m) => m.AuthModule),
   },
