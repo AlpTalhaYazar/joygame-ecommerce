@@ -1,1 +1,35 @@
-<p>welcome works!</p>
+<div class="welcome-container">
+  <nz-card nzTitle="Welcome to Our E-Commerce Project" [nzExtra]="extraTemplate">
+    <nz-typography>
+      <h2 nz-title>About Our Project</h2>
+      <p nz-paragraph>
+        This is a comprehensive e-commerce platform built with Angular and .NET Core.
+        Our project showcases a robust architecture integrating frontend and backend technologies.
+      </p>
+      <h3 nz-title>Key Features:</h3>
+      <nz-list>
+        <nz-list-item>User authentication and authorization</nz-list-item>
+        <nz-list-item>Product catalog with categories</nz-list-item>
+        <nz-list-item>Shopping cart functionality</nz-list-item>
+        <nz-list-item>Order management</nz-list-item>
+        <nz-list-item>Admin panel for product and category management</nz-list-item>
+      </nz-list>
+      <nz-divider></nz-divider>
+      <div nz-row [nzGutter]="16">
+        <div nz-col [nzSpan]="12">
+          <button nz-button nzType="primary" nzBlock (click)="navigateToLogin()">
+            <span nz-icon nzType="login"></span>Login to Explore
+          </button>
+        </div>
+        <div nz-col [nzSpan]="12">
+          <button nz-button nzBlock>
+            <span nz-icon nzType="info-circle"></span>Learn More
+          </button>
+        </div>
+      </div>
+    </nz-typography>
+  </nz-card>
+</div>
+<ng-template #extraTemplate>
+  <span nz-icon nzType="shopping-cart" nzTheme="outline"></span>
+</ng-template>
