@@ -39,12 +39,12 @@ export class AuthService {
       .pipe(
         map((response) => {
           if (response.isSuccess && response.data) {
-            this.notification.success(
-              'Login successful',
-              'You are now logged in'
-            );
+            // Store token
+            localStorage.setItem('token', response.data.token);
+            // Store user data
+            localStorage.setItem('currentUser', JSON.stringify(response.data.user));
+            this.currentUserSubject.next(response.data.user);
           }
-
           return response;
         }),
         catchError((error) => {
