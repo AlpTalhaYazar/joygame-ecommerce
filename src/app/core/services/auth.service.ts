@@ -20,9 +20,7 @@ export class AuthService {
 
   currentUser$ = this.currentUserSubject.asObservable();
 
-  private readonly notification = inject(NzNotificationService);
-
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private notification: NzNotificationService) {
     const storedUser = localStorage.getItem('currentUser');
     if (storedUser) {
       const userData = JSON.parse(storedUser);
