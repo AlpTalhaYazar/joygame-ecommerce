@@ -1,13 +1,13 @@
-import { ApiResult } from '../models/apiResult';
-import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
-import { map } from 'rxjs/operators';
-import { environment } from '../../../environments/environment';
+import { Injectable } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { LoginResponse, LoginResponseUser } from '../models/auth.models';
+import { map } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
+import { BehaviorSubject, throwError } from 'rxjs';
+import { ApiResult } from '../models/apiResult';
+import { environment } from '../../../environments/environment';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { LoginResponse, LoginResponseUser } from '../models/auth.models';
 
 @Injectable({
   providedIn: 'root',
@@ -20,7 +20,10 @@ export class AuthService {
 
   currentUser$ = this.currentUserSubject.asObservable();
 
-  constructor(private http: HttpClient, private notification: NzNotificationService) {
+  constructor(
+    private http: HttpClient,
+    private notification: NzNotificationService
+  ) {
     const storedUser = localStorage.getItem('currentUser');
     if (storedUser) {
       const userData = JSON.parse(storedUser);
@@ -40,7 +43,10 @@ export class AuthService {
             // Store token
             localStorage.setItem('token', response.data.token);
             // Store user data
-            localStorage.setItem('currentUser', JSON.stringify(response.data.user));
+            localStorage.setItem(
+              'currentUser',
+              JSON.stringify(response.data.user)
+            );
             this.currentUserSubject.next(response.data.user);
           }
           return response;
