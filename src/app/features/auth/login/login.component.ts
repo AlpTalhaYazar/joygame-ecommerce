@@ -5,6 +5,9 @@ import {FormsModule} from '@angular/forms';
 import {NzInputDirective, NzInputGroupComponent} from 'ng-zorro-antd/input';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {RouterLink} from '@angular/router';
+import { AuthService } from '../../../core/services/auth.service';
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 
 @Component({
   selector: 'app-login',
@@ -26,8 +29,15 @@ export class LoginComponent {
   username: string = '';
   password: string = '';
 
+  constructor(private authService: AuthService, private notification: NzNotificationService) {}
+
   onSubmit() {
-    // Implement login logic here
-    console.log('Login attempt', this.username, this.password);
+    this.authService.login(this.username, this.password).subscribe((response) => {
+      console.log(response);
+      this.notification.success('Login successful', 'You are now logged in');
+    }, (error) => {
+      console.log(error);
+      this.notification.error('Login failed', 'Invalid username or password');
+    });
   }
 }
