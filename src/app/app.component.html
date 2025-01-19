@@ -1,58 +1,82 @@
 <nz-layout class="app-layout">
-  <nz-sider class="menu-sidebar"
-            nzCollapsible
-            nzWidth="256px"
-            nzBreakpoint="md"
-            [(nzCollapsed)]="isCollapsed"
-            [nzTrigger]="null"
+  <nz-sider
+    class="menu-sidebar"
+    nzCollapsible
+    nzWidth="256px"
+    nzBreakpoint="md"
+    [(nzCollapsed)]="isCollapsed"
+    [nzTrigger]="null"
   >
-    <div class="sidebar-logo">
-      <a href="https://ng.ant.design/" target="_blank">
-        <img src="https://ng.ant.design/assets/img/logo.svg" alt="logo">
-        <h1>Ant Design of Angular</h1>
-      </a>
-    </div>
-    <ul nz-menu nzTheme="dark" nzMode="inline" [nzInlineCollapsed]="isCollapsed">
-      <li nz-submenu nzOpen nzTitle="Dashboard" nzIcon="dashboard">
-        <ul>
-          <li nz-menu-item nzMatchRouter>
-            <a routerLink="/">Welcome</a>
+    <div class="flex flex-col justify-between h-full">
+      <div>
+        <div class="sidebar-logo">
+          <a href="https://ng.ant.design/" target="_blank">
+            <img src="https://ng.ant.design/assets/img/logo.svg" alt="logo" />
+            <h1>Joyful E-Commerce</h1>
+          </a>
+        </div>
+        <ul
+          nz-menu
+          nzTheme="dark"
+          nzMode="inline"
+          [nzInlineCollapsed]="isCollapsed"
+        >
+          <li nz-submenu nzOpen nzTitle="Home" nzIcon="home">
+            <ul>
+              <li nz-menu-item nzMatchRouter>
+                <a routerLink="welcome">Welcome</a>
+              </li>
+            </ul>
           </li>
-          <li nz-menu-item nzMatchRouter>
-            <a>Monitor</a>
+          <li nz-submenu nzOpen nzTitle="Product" nzIcon="product">
+            <ul>
+              <li nz-menu-item nzMatchRouter>
+                <a routerLink="app/products">Product List</a>
+              </li>
+            </ul>
           </li>
-          <li nz-menu-item nzMatchRouter>
-            <a>Workplace</a>
+          <li nz-submenu nzOpen nzTitle="Category" nzIcon="ordered-list">
+            <ul>
+              <li nz-menu-item nzMatchRouter>
+                <a routerLink="app/categories">Category List</a>
+              </li>
+            </ul>
           </li>
         </ul>
-      </li>
-      <li nz-submenu nzOpen nzTitle="Form" nzIcon="form">
-        <ul>
-          <li nz-menu-item nzMatchRouter>
-            <a>Basic Form</a>
-          </li>
-        </ul>
-      </li>
-    </ul>
-    <div class="user-profile-section" [class.collapsed]="isCollapsed">
-      <!-- Show when user is not logged in -->
-      <div *ngIf="!isLoggedIn" class="login-section">
-        <button nz-button nzType="primary" (click)="login()">
-          <span nz-icon nzType="login"></span>
-          <span *ngIf="!isCollapsed">Login</span>
-        </button>
       </div>
 
-      <!-- Show when user is logged in -->
-      <div *ngIf="isLoggedIn" class="profile-section">
-        <div class="user-info" [class.collapsed]="isCollapsed">
-          <nz-avatar [nzSize]="32" nzIcon="user" [nzSrc]="userPhotoUrl"></nz-avatar>
-          <span class="username" *ngIf="!isCollapsed">{{ userName }}</span>
+      <div class="flex justify-center w-full py-4" [class.collapsed]="isCollapsed">
+        <div *ngIf="!isLoggedIn" class="login-section">
+          <button nz-button nzType="primary" (click)="login()">
+            <span nz-icon nzType="login"></span>
+            <span *ngIf="!isCollapsed">Login</span>
+          </button>
         </div>
-        <button nz-button nzType="link" (click)="logout()" class="logout-button">
-          <span nz-icon nzType="logout"></span>
-          <span *ngIf="!isCollapsed">Logout</span>
-        </button>
+
+        <div *ngIf="isLoggedIn" class="profile-section flex flex-col gap-4">
+          <div
+            class="user-info flex gap-2 items-center"
+            [class.collapsed]="isCollapsed"
+          >
+            <nz-avatar
+              [nzSize]="32"
+              nzIcon="user"
+              [nzSrc]="userPhotoUrl"
+            ></nz-avatar>
+            <span class="username text-white" *ngIf="!isCollapsed">{{
+              userName
+            }}</span>
+          </div>
+          <button
+            nz-button
+            nzType="primary"
+            (click)="logout()"
+            class="logout-button"
+          >
+            <span nz-icon nzType="logout"></span>
+            <span *ngIf="!isCollapsed">Logout</span>
+          </button>
+        </div>
       </div>
     </div>
   </nz-sider>
@@ -60,7 +84,10 @@
     <nz-header>
       <div class="app-header">
         <span class="header-trigger" (click)="isCollapsed = !isCollapsed">
-          <nz-icon class="trigger" [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"/>
+          <nz-icon
+            class="trigger"
+            [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"
+          />
         </span>
       </div>
     </nz-header>

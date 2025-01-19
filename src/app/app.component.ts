@@ -26,8 +26,8 @@ import {NgIf} from '@angular/common';
 })
 export class AppComponent {
   isCollapsed = false;
-  isLoggedIn = false; // You'll need to manage this state based on your auth service
-  userName = ''; // Set this from your user service
+  isLoggedIn = true; // You'll need to manage this state based on your auth service
+  userName = 'qwe qwe'; // Set this from your user service
   userPhotoUrl = ''; // Set this from your user service
 
   constructor(private authService: AuthService) {

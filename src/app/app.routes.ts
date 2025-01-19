@@ -1,11 +1,12 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
+import { permissionGuard } from './core/guards/permission.guard';
 
 export const routes: Routes = [
+  { path: '', redirectTo: 'welcome', pathMatch: 'full' },
   {
     path: '',
-    pathMatch: 'full',
     loadChildren: () =>
       import('./features/landing/landing.module').then((m) => m.LandingModule),
   },
@@ -16,10 +17,10 @@ export const routes: Routes = [
   },
   {
     path: 'app',
-    canActivate: [authGuard],
     children: [
       {
         path: 'products',
+        canActivate: [permissionGuard('product_view')],
         loadChildren: () =>
           import('./features/product/product.module').then(
             (m) => m.ProductModule
@@ -27,6 +28,7 @@ export const routes: Routes = [
       },
       {
         path: 'categories',
+        canActivate: [permissionGuard('category_view')],
         loadChildren: () =>
           import('./features/category/category.module').then(
             (m) => m.CategoryModule
