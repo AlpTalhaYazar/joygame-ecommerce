@@ -1,9 +1,10 @@
+import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { map } from 'rxjs/operators';
 import { catchError } from 'rxjs/operators';
-import { BehaviorSubject, throwError } from 'rxjs';
+import { BehaviorSubject, throwError, interval, takeWhile } from 'rxjs';
 import { ApiResult } from '../models/apiResult';
 import { environment } from '../../../environments/environment';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -22,7 +23,8 @@ export class AuthService {
 
   constructor(
     private http: HttpClient,
-    private notification: NzNotificationService
+    private notification: NzNotificationService,
+    private router: Router
   ) {
     const storedUser = localStorage.getItem('currentUser');
     if (storedUser) {
@@ -48,6 +50,8 @@ export class AuthService {
               JSON.stringify(response.data.user)
             );
             this.currentUserSubject.next(response.data.user);
+
+            this.successfullLoginNotification(response);
           }
           return response;
         }),
@@ -82,5 +86,34 @@ export class AuthService {
   isTokenValid(): boolean {
     const token = localStorage.getItem('token');
     return token ? !this.jwtHelper.isTokenExpired(token) : false;
+  }
+
+  successfullLoginNotification(response: ApiResult<LoginResponse>) {
+    const initialCount = 3;
+    const countdown$ = interval(1000).pipe(
+      takeWhile((val) => initialCount - val >= 0)
+    );
+
+    const subscription = countdown$.subscribe({
+      next: (val) => {
+        const remainingSeconds = initialCount - val;
+
+        this.notification.success(
+          'Login successful',
+          `Welcome back! ${response.data.user.firstName} ${response.data.user.lastName}, 
+           You will be redirecting to categories page in ${remainingSeconds}`,
+          { nzKey: 'login-success' }
+        );
+
+        if (remainingSeconds === 0) {
+          this.router.navigate(['app/categories']);
+          subscription.unsubscribe();
+        }
+      },
+      error: (error) => {
+        console.error(error);
+        subscription.unsubscribe();
+      },
+    });
   }
 }
