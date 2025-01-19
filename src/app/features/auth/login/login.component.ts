@@ -34,10 +34,8 @@ export class LoginComponent {
   onSubmit() {
     this.authService.login(this.username, this.password).subscribe((response) => {
       console.log(response);
-      this.notification.success('Login successful', 'You are now logged in');
     }, (error) => {
       console.log(error);
-      this.notification.error('Login failed', 'Invalid username or password');
     });
   }
 }
