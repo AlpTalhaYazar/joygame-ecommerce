@@ -3,16 +3,23 @@ import { AuthService } from '../../../core/services/auth.service';
 import { ProductService } from '../services/product.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Product } from '../interfaces/product.interface';
-import {NzBreadCrumbComponent, NzBreadCrumbItemComponent} from 'ng-zorro-antd/breadcrumb';
-import {NzInputGroupComponent, NzInputGroupWhitSuffixOrPrefixDirective} from 'ng-zorro-antd/input';
-import {FormsModule} from '@angular/forms';
-import {NzOptionComponent, NzSelectComponent} from 'ng-zorro-antd/select';
-import {NzSpinComponent} from 'ng-zorro-antd/spin';
-import {NgForOf, NgIf} from '@angular/common';
-import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
-import {ProductCardComponent} from '../product-card/product-card.component';
-import {NzEmptyComponent} from 'ng-zorro-antd/empty';
-import {NzPaginationComponent} from 'ng-zorro-antd/pagination';
+import {
+  NzBreadCrumbComponent,
+  NzBreadCrumbItemComponent,
+} from 'ng-zorro-antd/breadcrumb';
+import {
+  NzInputGroupComponent,
+  NzInputGroupWhitSuffixOrPrefixDirective,
+} from 'ng-zorro-antd/input';
+import { FormsModule } from '@angular/forms';
+import {NzOptionComponent, NzOptionGroupComponent, NzSelectComponent} from 'ng-zorro-antd/select';
+import { NzSpinComponent } from 'ng-zorro-antd/spin';
+import { NgForOf, NgIf } from '@angular/common';
+import { NzColDirective, NzRowDirective } from 'ng-zorro-antd/grid';
+import { ProductCardComponent } from '../product-card/product-card.component';
+import { NzEmptyComponent } from 'ng-zorro-antd/empty';
+import { NzPaginationComponent } from 'ng-zorro-antd/pagination';
+import { CategoryService } from '../../category/services/category.service';
 
 @Component({
   selector: 'app-product-list',
@@ -31,7 +38,8 @@ import {NzPaginationComponent} from 'ng-zorro-antd/pagination';
     NgForOf,
     ProductCardComponent,
     NzEmptyComponent,
-    NzPaginationComponent
+    NzPaginationComponent,
+    NzOptionGroupComponent,
   ],
   templateUrl: './product-list.component.html',
   styleUrl: './product-list.component.scss',
@@ -40,41 +48,44 @@ export class ProductListComponent {
   loading = false;
   products: Product[] = [];
   filteredProducts: Product[] = [];
-  categories: string[] = [];
+  parentCategories: { id: number; name: string }[] | [] = [];
+  childCategories: { id: number; name: string }[] | [] = [];
+  categories: { id: string; name: string }[] = [];
 
-  // Pagination
   pageIndex = 1;
   pageSize = 12;
   total = 0;
 
-  // Filters
   searchText = '';
-  selectedCategory: string | null = null;
+  selectedCategory: number | null = null;
 
   constructor(
+    private authService: AuthService,
     private productService: ProductService,
+    private categoryService: CategoryService,
     private notification: NzNotificationService
   ) {}
 
   ngOnInit(): void {
     this.loadProducts();
+    this.loadCategories();
   }
 
   loadProducts(): void {
     this.loading = true;
     this.productService
-      .getProductsWithCategories(this.pageIndex, this.pageSize)
+      .getProductsWithCategories(this.pageIndex, this.pageSize, this.selectedCategory, this.searchText)
       .subscribe({
         next: (response) => {
           if (response.isSuccess) {
             this.products = response.data;
             this.filteredProducts = this.products;
             this.total = response.total;
-            this.updateCategories();
           } else {
             this.notification.error(
               'Failed to load products',
-              response?.error?.message ?? 'An error occurred while loading products'
+              response?.error?.message ??
+                'An error occurred while loading products'
             );
           }
         },
@@ -91,18 +102,32 @@ export class ProductListComponent {
       });
   }
 
-  updateCategories(): void {
-    this.categories = [
-      ...new Set(this.products.map((p) => p.categoryName)),
-    ].sort();
+  loadCategories(): void {
+    this.loading = true;
+    this.categoryService.getCategories().subscribe({
+      next: (response) => {
+        if (response.isSuccess) {
+          this.parentCategories =
+            response.data
+              ?.filter((category) => category.parentId === null)
+              .map((category) => ({ id: category.id, name: category.name })) ??
+            [];
+          this.childCategories =
+            response.data
+              ?.filter((category) => category.parentId !== null)
+              .map((category) => ({ id: category.id, name: category.name })) ??
+            [];
+        }
+      },
+    });
   }
 
   onSearch(): void {
-    this.filterProducts();
+    this.loadProducts();
   }
 
   onCategoryChange(): void {
-    this.filterProducts();
+    this.loadProducts();
   }
 
   filterProducts(): void {
@@ -114,12 +139,6 @@ export class ProductListComponent {
         (product) =>
           product.productName.toLowerCase().includes(searchLower) ||
           product.productDescription.toLowerCase().includes(searchLower)
-      );
-    }
-
-    if (this.selectedCategory) {
-      filtered = filtered.filter(
-        (product) => product.categoryName === this.selectedCategory
       );
     }
 

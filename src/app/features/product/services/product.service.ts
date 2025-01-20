@@ -19,13 +19,28 @@ export class ProductService {
     return this.http.get(this.getAllProductsEndpoint);
   }
 
-  getProductsWithCategories(page: number, pageSize: number) {
+  getProductsWithCategories(
+    page: number,
+    pageSize: number,
+    categoryId: number | null,
+    searchText: string | null
+  ) {
+    const params: any = {
+      page: page.toString(),
+      pageSize: pageSize.toString(),
+    };
+
+    if (categoryId) {
+      params['categoryId'] = categoryId.toString();
+    }
+
+    if (searchText) {
+      params['searchText'] = searchText;
+    }
+
     return this.http
       .get<PaginationApiResult<any>>(this.getProductsWithCategoriesEndpoint, {
-        params: {
-          page: page.toString(),
-          pageSize: pageSize.toString()
-        },
+        params,
       })
       .pipe(
         map((response: PaginationApiResult<any>) => {

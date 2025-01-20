@@ -11,7 +11,7 @@
     <div class="filters flex flex-col md:flex-row justify-center">
       <nz-input-group [nzSuffix]="suffixIconSearch" class="search-input flex-1">
         <input
-        class="w-full"
+          class="w-full"
           type="text"
           nz-input
           placeholder="Search products"
@@ -30,12 +30,26 @@
         nzAllowClear
         nzPlaceHolder="Filter by category"
       >
-        <nz-option
-          *ngFor="let category of categories"
-          [nzValue]="category"
-          [nzLabel]="category"
+        <nz-option-group
+          nzLabel="Parent Categories"
         >
-        </nz-option>
+          <nz-option
+            *ngFor="let category of parentCategories"
+            [nzValue]="category.id"
+            [nzLabel]="category.name"
+          >
+          </nz-option>
+        </nz-option-group>
+        
+        <nz-option-group
+          nzLabel="Categories"
+        >
+          <nz-option
+            *ngFor="let category of childCategories"
+            [nzValue]="category.id"
+            [nzLabel]="category.name"
+          ></nz-option>
+        </nz-option-group>
       </nz-select>
     </div>
   </div>
