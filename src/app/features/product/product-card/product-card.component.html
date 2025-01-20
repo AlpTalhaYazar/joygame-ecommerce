@@ -1,0 +1,27 @@
+<nz-card
+  [nzHoverable]="true"
+  class="product-card"
+  [routerLink]="['/app/products', product.productId]"
+>
+  <nz-card-meta
+    [nzTitle]="titleTemplate"
+    [nzDescription]="product.productDescription"
+  >
+  </nz-card-meta>
+
+  <ng-template #titleTemplate>
+    <div class="product-title">
+      <span class="text-wrap">{{ product.productName }}</span>
+      <span class="price">${{ product.price.toFixed(2) }}</span>
+    </div>
+  </ng-template>
+
+  <div class="product-footer">
+    <nz-tag [nzColor]="getCategoryColor()">
+      {{ product.categoryName }}
+    </nz-tag>
+    <span class="stock" [class.low-stock]="product.stockQuantity < 50">
+      {{ product.stockQuantity }} in stock
+    </span>
+  </div>
+</nz-card>
