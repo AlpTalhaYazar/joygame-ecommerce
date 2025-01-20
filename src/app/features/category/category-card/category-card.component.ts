@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { AuthService } from '../../../core/services/auth.service';
-import { Category } from '../interfaces/category.interface';
+import { CategoryWithHierarchy } from '../interfaces/category.interface';
 import { NzCardComponent } from 'ng-zorro-antd/card';
 import { RouterLink } from '@angular/router';
 import { NzTagComponent } from 'ng-zorro-antd/tag';
@@ -21,7 +21,7 @@ import { NzAvatarComponent } from 'ng-zorro-antd/avatar';
   styleUrl: './category-card.component.scss',
 })
 export class CategoryCardComponent {
-  @Input() category!: Category;
+  @Input() category!: CategoryWithHierarchy;
 
   canManageCategory = false;
   environment: any;

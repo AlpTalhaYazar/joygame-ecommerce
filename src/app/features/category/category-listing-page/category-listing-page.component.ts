@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../../core/services/auth.service';
 import { CategoryService } from '../services/category.service';
-import { Category } from '../interfaces/category.interface';
+import { CategoryWithHierarchy } from '../interfaces/category.interface';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import {
   NzBreadCrumbComponent,
@@ -40,8 +40,8 @@ import { NzEmptyComponent } from 'ng-zorro-antd/empty';
 })
 export class CategoryListingPageComponent implements OnInit {
   loading = false;
-  categories: Category[] | null = [];
-  filteredCategories: Category[] = [];
+  categories: CategoryWithHierarchy[] | null = [];
+  filteredCategories: CategoryWithHierarchy[] = [];
   currentView: 'all' | 'main' | 'sub' = 'all';
   searchText = '';
 

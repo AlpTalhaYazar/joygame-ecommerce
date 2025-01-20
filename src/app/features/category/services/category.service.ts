@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
 import { ApiResult } from '../../../core/models/apiResult';
 import { catchError, map } from 'rxjs';
-import { Category } from '../interfaces/category.interface';
+import { Category, CategoryWithHierarchy } from '../interfaces/category.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -16,14 +16,21 @@ export class CategoryService {
   constructor(private http: HttpClient) {}
 
   getCategories() {
-    return this.http.get(this.getAllCategoriesEndpoint);
+    return this.http.get<ApiResult<Category[]>>(this.getAllCategoriesEndpoint).pipe(
+      map((response: ApiResult<Category[]>) => {
+        return response;
+      }),
+      catchError((error) => {
+        throw error;
+      })
+    );
   }
 
   getCategoriesHierarchy() {
     return this.http
-      .get<ApiResult<Category[]>>(this.getCategoriesHierarchyEndpoint)
+      .get<ApiResult<CategoryWithHierarchy[]>>(this.getCategoriesHierarchyEndpoint)
       .pipe(
-        map((response: ApiResult<Category[]>) => {
+        map((response: ApiResult<CategoryWithHierarchy[]>) => {
           return response;
         }),
         catchError((error) => {
