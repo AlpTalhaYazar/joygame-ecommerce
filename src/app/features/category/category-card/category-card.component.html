@@ -1,0 +1,16 @@
+<nz-card
+  [nzHoverable]="true"
+  class="category-card"
+  [routerLink]="['/app/categories', category.id]"
+>
+  <div class="category-icon">
+    <i nz-icon [nzType]="getCategoryIcon()" nzTheme="outline"></i>
+  </div>
+  <h3 class="category-title">{{ category.name }}</h3>
+  <p class="category-description">{{ category.description }}</p>
+  <nz-tag *ngIf="category.level === 0" nzColor="blue">Main Category</nz-tag>
+  <nz-tag *ngIf="category.level === 1" nzColor="green">Sub Category</nz-tag>
+  <div class="category-hierarchy">
+    <small>{{ category.hierarchy }}</small>
+  </div>
+</nz-card>
