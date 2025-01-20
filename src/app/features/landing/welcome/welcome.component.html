@@ -1,10 +1,16 @@
 <div class="welcome-container">
-  <nz-card nzTitle="Welcome to Our E-Commerce Project" [nzExtra]="extraTemplate">
+  <nz-card
+    nzTitle="Welcome to Our E-Commerce Project {{ this.firstName }} {{
+      this.lastName
+    }}"
+    [nzExtra]="extraTemplate"
+  >
     <nz-typography>
       <h2 nz-title>About Our Project</h2>
       <p nz-paragraph>
-        This is a comprehensive e-commerce platform built with Angular and .NET Core.
-        Our project showcases a robust architecture integrating frontend and backend technologies.
+        This is a comprehensive e-commerce platform built with Angular and .NET
+        Core. Our project showcases a robust architecture integrating frontend
+        and backend technologies.
       </p>
       <h3 nz-title>Key Features:</h3>
       <nz-list>
@@ -12,18 +18,49 @@
         <nz-list-item>Product catalog with categories</nz-list-item>
         <nz-list-item>Shopping cart functionality</nz-list-item>
         <nz-list-item>Order management</nz-list-item>
-        <nz-list-item>Admin panel for product and category management</nz-list-item>
+        <nz-list-item
+          >Admin panel for product and category management</nz-list-item
+        >
       </nz-list>
       <nz-divider></nz-divider>
-      <div nz-row [nzGutter]="16">
+      <div nz-row [nzGutter]="16" *ngIf="!isUserLoggedIn">
         <div nz-col [nzSpan]="12">
-          <button nz-button nzType="primary" nzBlock (click)="navigateToLogin()">
+          <button
+            class="flex justify-center items-center"
+            nz-button
+            nzType="primary"
+            nzBlock
+            routerLink="/login"
+          >
             <span nz-icon nzType="login"></span>Login to Explore
           </button>
         </div>
         <div nz-col [nzSpan]="12">
-          <button nz-button nzBlock>
+          <button class="flex justify-center items-center" nz-button nzBlock>
             <span nz-icon nzType="info-circle"></span>Learn More
+          </button>
+        </div>
+      </div>
+      <div nz-row [nzGutter]="16" *ngIf="isUserLoggedIn">
+        <div nz-col [nzSpan]="12">
+          <button
+            class="flex justify-center items-center"
+            nz-button
+            nzType="primary"
+            nzBlock
+            routerLink="/app/categories"
+          >
+            <span nz-icon nzType="appstore"></span>Explore Categories
+          </button>
+        </div>
+        <div nz-col [nzSpan]="12">
+          <button
+            class="flex justify-center items-center"
+            nz-button
+            nzBlock
+            routerLink="/app/products"
+          >
+            <span nz-icon nzType="shop"></span>Explore Products
           </button>
         </div>
       </div>
