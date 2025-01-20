@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { CategoryService } from './services/category.service';
 import { CategoryCardComponent } from './category-card/category-card.component';
 import { CategoryListingPageComponent } from './category-listing-page/category-listing-page.component';
 
