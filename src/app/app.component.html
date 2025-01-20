@@ -35,7 +35,7 @@
               </li>
             </ul>
           </li>
-          <li nz-submenu nzOpen nzTitle="Category" nzIcon="ordered-list">
+          <li nz-submenu nzOpen nzTitle="Category" nzIcon="ordered-list" *ngIf="isLoggedIn">
             <ul>
               <li nz-menu-item nzMatchRouter>
                 <a routerLink="app/categories">Category List</a>
@@ -47,7 +47,7 @@
 
       <div class="flex justify-center w-full py-4" [class.collapsed]="isCollapsed">
         <div *ngIf="!isLoggedIn" class="login-section">
-          <button nz-button nzType="primary" (click)="login()">
+          <button nz-button nzType="primary" routerLink="/login">
             <span nz-icon nzType="login"></span>
             <span *ngIf="!isCollapsed">Login</span>
           </button>
