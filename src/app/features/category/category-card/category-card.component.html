@@ -4,7 +4,7 @@
   [routerLink]="['/app/categories', category.id]"
 >
   <div class="category-icon">
-    <i nz-icon [nzType]="getCategoryIcon()" nzTheme="outline"></i>
+    <nz-avatar [nzShape]="'square'" [nzSize]="64" [nzSrc]="environment.apiUrl + '/images/categories/' + category.slug + '.png'"></nz-avatar>
   </div>
   <h3 class="category-title">{{ category.name }}</h3>
   <p class="category-description">{{ category.description }}</p>

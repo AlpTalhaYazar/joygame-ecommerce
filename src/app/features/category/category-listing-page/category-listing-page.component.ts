@@ -2,6 +2,20 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../../core/services/auth.service';
 import { CategoryService } from '../services/category.service';
 import { Category } from '../interfaces/category.interface';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import {
+  NzBreadCrumbComponent,
+  NzBreadCrumbItemComponent,
+} from 'ng-zorro-antd/breadcrumb';
+import { NzRadioGroupComponent } from 'ng-zorro-antd/radio';
+import { FormsModule } from '@angular/forms';
+import { NzInputDirective, NzInputGroupComponent } from 'ng-zorro-antd/input';
+import { NzIconDirective } from 'ng-zorro-antd/icon';
+import { NzSpinComponent } from 'ng-zorro-antd/spin';
+import { NzColDirective, NzRowDirective } from 'ng-zorro-antd/grid';
+import { NgForOf, NgIf } from '@angular/common';
+import { CategoryCardComponent } from '../category-card/category-card.component';
+import { NzEmptyComponent } from 'ng-zorro-antd/empty';
 
 @Component({
   selector: 'app-category-listing-page',
@@ -19,7 +33,7 @@ import { Category } from '../interfaces/category.interface';
     NgForOf,
     CategoryCardComponent,
     NzEmptyComponent,
-    NgIf
+    NgIf,
   ],
   templateUrl: './category-listing-page.component.html',
   styleUrl: './category-listing-page.component.scss',
@@ -93,14 +107,3 @@ export class CategoryListingPageComponent implements OnInit {
     this.filteredCategories = filtered;
   }
 }
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import {NzBreadCrumbComponent, NzBreadCrumbItemComponent} from 'ng-zorro-antd/breadcrumb';
-import {NzRadioGroupComponent} from 'ng-zorro-antd/radio';
-import {FormsModule} from '@angular/forms';
-import {NzInputDirective, NzInputGroupComponent} from 'ng-zorro-antd/input';
-import {NzIconDirective} from 'ng-zorro-antd/icon';
-import {NzSpinComponent} from 'ng-zorro-antd/spin';
-import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
-import {NgForOf, NgIf} from '@angular/common';
-import {CategoryCardComponent} from '../category-card/category-card.component';
-import {NzEmptyComponent} from 'ng-zorro-antd/empty';
