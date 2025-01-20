@@ -1,1 +1,60 @@
-<p>category-listing-page works!</p>
+<div class="category-listing h-full overflow-hidden">
+  <div class="page-header sticky-header">
+    <div
+      class="header-content flex flex-col md:flex-row justify-between items-center"
+    >
+      <div class="header-section">
+        <div>
+          <h1>Categories</h1>
+          <nz-breadcrumb>
+            <nz-breadcrumb-item>Home</nz-breadcrumb-item>
+            <nz-breadcrumb-item>Categories</nz-breadcrumb-item>
+          </nz-breadcrumb>
+        </div>
+      </div>
+      <div class="filters">
+        <nz-radio-group [(ngModel)]="currentView" class="view-toggle">
+          <label nz-radio-button nzValue="all">All Categories</label>
+          <label nz-radio-button nzValue="main">Main Categories</label>
+          <label nz-radio-button nzValue="sub">Sub Categories</label>
+        </nz-radio-group>
+
+        <nz-input-group [nzSuffix]="suffixIconSearch" class="search-input">
+          <input
+            type="text"
+            nz-input
+            placeholder="Search categories"
+            [(ngModel)]="searchText"
+            (ngModelChange)="filterCategories()"
+          />
+        </nz-input-group>
+        <ng-template #suffixIconSearch>
+          <i nz-icon nzType="search"></i>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+
+  <div class="categories-grid h-full overflow-scroll p-4 pb-36">
+    <nz-spin [nzSpinning]="loading">
+      <ng-container *ngIf="filteredCategories.length > 0; else noData">
+        <nz-row [nzGutter]="[16, 16]">
+          <nz-col
+            [nzXs]="24"
+            [nzSm]="12"
+            [nzMd]="8"
+            [nzLg]="6"
+            *ngFor="let category of filteredCategories"
+          >
+            <app-category-card [category]="category"></app-category-card>
+          </nz-col>
+        </nz-row>
+      </ng-container>
+
+      <ng-template #noData>
+        <nz-empty [nzNotFoundContent]="'No categories found'" *ngIf="!loading">
+        </nz-empty>
+      </ng-template>
+    </nz-spin>
+  </div>
+</div>

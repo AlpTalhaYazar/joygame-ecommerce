@@ -1,0 +1,31 @@
+.category-listing {
+  margin: 1rem;
+}
+
+.page-header {
+  margin-bottom: 24px;
+
+  h1 {
+    margin-bottom: 8px;
+    font-size: 24px;
+  }
+}
+
+.filters {
+  margin-bottom: 24px;
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+
+  .view-toggle {
+    margin-right: 16px;
+  }
+
+  .search-input {
+    max-width: 300px;
+  }
+}
+
+.categories-grid {
+  min-height: 200px;
+}
