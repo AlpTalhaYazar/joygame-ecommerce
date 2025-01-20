@@ -1,0 +1,37 @@
+.product-listing {
+  padding: 24px;
+}
+
+.page-header {
+  margin-bottom: 24px;
+
+  h1 {
+    margin-bottom: 8px;
+    font-size: 24px;
+  }
+}
+
+.filters {
+  margin-bottom: 24px;
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+
+  .search-input {
+    width: 300px;
+  }
+
+  .category-filter {
+    width: 200px;
+  }
+}
+
+.products-grid {
+  min-height: 400px;
+}
+
+.pagination {
+  margin-top: 24px;
+  display: flex;
+  justify-content: flex-end;
+}

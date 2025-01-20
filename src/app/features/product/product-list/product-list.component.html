@@ -1,1 +1,76 @@
-<p>product-list works!</p>
+<div class="product-listing h-full overflow-hidden flex flex-col">
+  <div class="flex flex-col md:flex-row justify-between items-center">
+    <div class="page-header">
+      <h1>Products</h1>
+      <nz-breadcrumb>
+        <nz-breadcrumb-item>Home</nz-breadcrumb-item>
+        <nz-breadcrumb-item>Products</nz-breadcrumb-item>
+      </nz-breadcrumb>
+    </div>
+
+    <div class="filters flex justify-center">
+      <nz-input-group [nzSuffix]="suffixIconSearch" class="search-input">
+        <input
+          type="text"
+          nz-input
+          placeholder="Search products"
+          [(ngModel)]="searchText"
+          (ngModelChange)="onSearch()"
+        />
+      </nz-input-group>
+      <ng-template #suffixIconSearch>
+        <i nz-icon nzType="search"></i>
+      </ng-template>
+
+      <nz-select
+        [(ngModel)]="selectedCategory"
+        (ngModelChange)="onCategoryChange()"
+        class="category-filter"
+        nzAllowClear
+        nzPlaceHolder="Filter by category"
+      >
+        <nz-option
+          *ngFor="let category of categories"
+          [nzValue]="category"
+          [nzLabel]="category"
+        >
+        </nz-option>
+      </nz-select>
+    </div>
+  </div>
+
+  <div class="products-grid h-full overflow-auto flex-1 p-4">
+    <nz-spin [nzSpinning]="loading">
+      <ng-container *ngIf="filteredProducts.length > 0; else noData">
+        <nz-row [nzGutter]="[24, 24]" class="flex justify-center">
+          <nz-col
+            [nzMd]="24"
+            [nzLg]="12"
+            *ngFor="let product of filteredProducts"
+            class="w-[95%]"
+          >
+            <app-product-card [product]="product"></app-product-card>
+          </nz-col>
+        </nz-row>
+      </ng-container>
+
+      <ng-template #noData>
+        <nz-empty [nzNotFoundContent]="'No products found'" *ngIf="!loading">
+        </nz-empty>
+      </ng-template>
+    </nz-spin>
+  </div>
+
+  <div class="pagination">
+    <nz-pagination
+      [nzTotal]="total"
+      [(nzPageIndex)]="pageIndex"
+      [(nzPageSize)]="pageSize"
+      [nzShowSizeChanger]="true"
+      [nzShowQuickJumper]="true"
+      (nzPageIndexChange)="loadProducts()"
+      (nzPageSizeChange)="onPageSizeChange()"
+    >
+    </nz-pagination>
+  </div>
+</div>
