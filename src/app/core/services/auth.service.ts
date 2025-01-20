@@ -108,7 +108,7 @@ export class AuthService {
 
         this.notification.success(
           'Login successful',
-          `Welcome back! ${response.data.user.firstName} ${response.data.user.lastName}, 
+          `Welcome back! ${response?.data?.user.firstName} ${response?.data?.user.lastName}, 
            You will be redirecting to categories page in ${remainingSeconds}`,
           { nzKey: 'login-success' }
         );

@@ -40,7 +40,7 @@ import { NzEmptyComponent } from 'ng-zorro-antd/empty';
 })
 export class CategoryListingPageComponent implements OnInit {
   loading = false;
-  categories: Category[] = [];
+  categories: Category[] | null = [];
   filteredCategories: Category[] = [];
   currentView: 'all' | 'main' | 'sub' = 'all';
   searchText = '';
@@ -68,7 +68,7 @@ export class CategoryListingPageComponent implements OnInit {
           this.filterCategories();
         } else {
           this.notification.error(
-            response.error.message || 'Failed to load categories',
+            response?.error?.message || 'Failed to load categories',
             'Error'
           );
         }
@@ -84,7 +84,7 @@ export class CategoryListingPageComponent implements OnInit {
   }
 
   filterCategories(): void {
-    let filtered = [...this.categories];
+    let filtered = [...(this.categories ?? [])];
 
     // Filter by view type
     if (this.currentView === 'main') {

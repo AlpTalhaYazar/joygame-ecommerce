@@ -74,7 +74,7 @@ export class ProductListComponent {
           } else {
             this.notification.error(
               'Failed to load products',
-              response.error.message
+              response?.error?.message ?? 'An error occurred while loading products'
             );
           }
         },
