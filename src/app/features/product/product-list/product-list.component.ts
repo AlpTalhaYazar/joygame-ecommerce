@@ -69,7 +69,7 @@ export class ProductListComponent {
           if (response.isSuccess) {
             this.products = response.data;
             this.filteredProducts = this.products;
-            this.total = response.data.length; // Update with actual total from backend
+            this.total = response.total;
             this.updateCategories();
           } else {
             this.notification.error(

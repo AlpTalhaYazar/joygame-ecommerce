@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { catchError, map } from 'rxjs';
 
 import { environment } from '../../../../environments/environment';
-import { ApiResult } from '../../../core/models/apiResult';
+import { ApiResult, PaginationApiResult } from '../../../core/models/apiResult';
 
 @Injectable({
   providedIn: 'root',
@@ -21,14 +21,14 @@ export class ProductService {
 
   getProductsWithCategories(page: number, pageSize: number) {
     return this.http
-      .get<ApiResult<any>>(this.getProductsWithCategoriesEndpoint, {
+      .get<PaginationApiResult<any>>(this.getProductsWithCategoriesEndpoint, {
         params: {
           page: page.toString(),
           pageSize: pageSize.toString()
         },
       })
       .pipe(
-        map((response: ApiResult<any>) => {
+        map((response: PaginationApiResult<any>) => {
           return response;
         }),
         catchError((error) => {

@@ -8,9 +8,10 @@
       </nz-breadcrumb>
     </div>
 
-    <div class="filters flex justify-center">
-      <nz-input-group [nzSuffix]="suffixIconSearch" class="search-input">
+    <div class="filters flex flex-col md:flex-row justify-center">
+      <nz-input-group [nzSuffix]="suffixIconSearch" class="search-input flex-1">
         <input
+        class="w-full"
           type="text"
           nz-input
           placeholder="Search products"
@@ -25,7 +26,7 @@
       <nz-select
         [(ngModel)]="selectedCategory"
         (ngModelChange)="onCategoryChange()"
-        class="category-filter"
+        class="category-filter flex-1 w-full"
         nzAllowClear
         nzPlaceHolder="Filter by category"
       >

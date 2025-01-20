@@ -7,7 +7,7 @@ export class ApiResult<T> {
   } | null = null;
 }
 
-export class PaginationResult<T> extends ApiResult<T> {
+export class PaginationApiResult<T> extends ApiResult<T> {
   public page: number = 1;
   public limit: number = 10;
   public total: number = 0;
