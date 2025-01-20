@@ -88,6 +88,14 @@ export class AuthService {
     return token ? !this.jwtHelper.isTokenExpired(token) : false;
   }
 
+  isUserLoggedIn(): boolean {
+    return this.currentUserSubject.value !== null;
+  }
+
+  getCurrentUser(): LoginResponseUser | null {
+    return this.currentUserSubject.value;
+  }
+
   successfullLoginNotification(response: ApiResult<LoginResponse>) {
     const initialCount = 3;
     const countdown$ = interval(1000).pipe(

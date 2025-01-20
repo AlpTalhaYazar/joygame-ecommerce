@@ -28,7 +28,7 @@
               </li>
             </ul>
           </li>
-          <li nz-submenu nzOpen nzTitle="Product" nzIcon="product">
+          <li nz-submenu nzOpen nzTitle="Product" nzIcon="product" *ngIf="isLoggedIn">
             <ul>
               <li nz-menu-item nzMatchRouter>
                 <a routerLink="app/products">Product List</a>
@@ -61,10 +61,9 @@
             <nz-avatar
               [nzSize]="32"
               nzIcon="user"
-              [nzSrc]="userPhotoUrl"
             ></nz-avatar>
             <span class="username text-white" *ngIf="!isCollapsed">{{
-              userName
+              firstName + ' ' + lastName
             }}</span>
           </div>
           <button

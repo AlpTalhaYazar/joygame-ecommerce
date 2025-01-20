@@ -1,13 +1,15 @@
-import { Component } from '@angular/core';
+import { NgIf } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
-import { AuthService } from './core/services/auth.service';
 
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { NzButtonModule } from 'ng-zorro-antd/button';
-import {NzAvatarComponent} from 'ng-zorro-antd/avatar';
-import {NgIf} from '@angular/common';
+import { NzAvatarComponent } from 'ng-zorro-antd/avatar';
+
+import { AuthService } from './core/services/auth.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -24,18 +26,35 @@ import {NgIf} from '@angular/common';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   isCollapsed = false;
-  isLoggedIn = true; // You'll need to manage this state based on your auth service
-  userName = 'qwe qwe'; // Set this from your user service
-  userPhotoUrl = ''; // Set this from your user service
+  isLoggedIn: boolean = false;
+  firstName: string = '';
+  lastName: string = '';
 
-  constructor(private authService: AuthService) {
+  private authSubscription: Subscription | undefined;
+
+  constructor(private authService: AuthService) {}
+
+  async ngOnInit() {
+    this.isLoggedIn = this.authService.isUserLoggedIn();
+
+    this.authSubscription = this.authService.currentUser$.subscribe(
+      (user) => {
+        this.isLoggedIn = !!user;
+        if (user) {
+          this.firstName = user.firstName;
+          this.lastName = user.lastName;
+        }
+      }
+    );
   }
 
-  login() {
+  async ngOnDestroy() {
+    this.authSubscription?.unsubscribe();
   }
 
-  logout() {
-  }
+  login() {}
+
+  logout() {}
 }
