@@ -1,21 +1,23 @@
+import { FormsModule } from '@angular/forms';
+import { NgForOf, NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../../../core/services/auth.service';
-import { CategoryService } from '../services/category.service';
-import { CategoryWithHierarchy } from '../interfaces/category.interface';
+
+import { NzSpinComponent } from 'ng-zorro-antd/spin';
+import { NzIconDirective } from 'ng-zorro-antd/icon';
+import { NzEmptyComponent } from 'ng-zorro-antd/empty';
+import { NzRadioGroupComponent } from 'ng-zorro-antd/radio';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NzColDirective, NzRowDirective } from 'ng-zorro-antd/grid';
+import { NzInputDirective, NzInputGroupComponent } from 'ng-zorro-antd/input';
 import {
   NzBreadCrumbComponent,
   NzBreadCrumbItemComponent,
 } from 'ng-zorro-antd/breadcrumb';
-import { NzRadioGroupComponent } from 'ng-zorro-antd/radio';
-import { FormsModule } from '@angular/forms';
-import { NzInputDirective, NzInputGroupComponent } from 'ng-zorro-antd/input';
-import { NzIconDirective } from 'ng-zorro-antd/icon';
-import { NzSpinComponent } from 'ng-zorro-antd/spin';
-import { NzColDirective, NzRowDirective } from 'ng-zorro-antd/grid';
-import { NgForOf, NgIf } from '@angular/common';
+
+import { AuthService } from '../../../core/services/auth.service';
+import { CategoryService } from '../services/category.service';
+import { CategoryWithHierarchy } from '../interfaces/category.interface';
 import { CategoryCardComponent } from '../category-card/category-card.component';
-import { NzEmptyComponent } from 'ng-zorro-antd/empty';
 
 @Component({
   selector: 'app-category-listing-page',
@@ -55,17 +57,17 @@ export class CategoryListingPageComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
-    this.loadCategories();
+  async ngOnInit(): Promise<void> {
+    await this.loadCategories();
   }
 
-  loadCategories(): void {
+  async loadCategories(): Promise<void> {
     this.loading = true;
     this.categoryService.getCategoriesHierarchy().subscribe({
-      next: (response) => {
+      next: async (response) => {
         if (response.isSuccess) {
           this.categories = response.data;
-          this.filterCategories();
+          await this.filterCategories();
         } else {
           this.notification.error(
             response?.error?.message || 'Failed to load categories',
@@ -83,17 +85,15 @@ export class CategoryListingPageComponent implements OnInit {
     });
   }
 
-  filterCategories(): void {
+  async filterCategories(): Promise<void> {
     let filtered = [...(this.categories ?? [])];
 
-    // Filter by view type
     if (this.currentView === 'main') {
       filtered = filtered.filter((cat) => cat.level === 0);
     } else if (this.currentView === 'sub') {
       filtered = filtered.filter((cat) => cat.level === 1);
     }
 
-    // Filter by search text
     if (this.searchText) {
       const searchLower = this.searchText.toLowerCase();
       filtered = filtered.filter(

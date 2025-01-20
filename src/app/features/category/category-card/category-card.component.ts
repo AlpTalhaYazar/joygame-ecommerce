@@ -1,12 +1,14 @@
-import { Component, Input } from '@angular/core';
-import { AuthService } from '../../../core/services/auth.service';
-import { CategoryWithHierarchy } from '../interfaces/category.interface';
-import { NzCardComponent } from 'ng-zorro-antd/card';
-import { RouterLink } from '@angular/router';
-import { NzTagComponent } from 'ng-zorro-antd/tag';
 import { NgIf } from '@angular/common';
-import { environment } from '../../../../environments/environment';
+import { RouterLink } from '@angular/router';
+import { Component, Input } from '@angular/core';
+
+import { NzTagComponent } from 'ng-zorro-antd/tag';
+import { NzCardComponent } from 'ng-zorro-antd/card';
 import { NzAvatarComponent } from 'ng-zorro-antd/avatar';
+
+import { AuthService } from '../../../core/services/auth.service';
+import { environment } from '../../../../environments/environment';
+import { CategoryWithHierarchy } from '../interfaces/category.interface';
 
 @Component({
   selector: 'app-category-card',

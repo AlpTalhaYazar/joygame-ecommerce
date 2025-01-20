@@ -1,10 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { environment } from '../../../../environments/environment';
-import { ApiResult } from '../../../core/models/apiResult';
 import { catchError, map } from 'rxjs';
-import { Category, CategoryWithHierarchy } from '../interfaces/category.interface';
+
+import { ApiResult } from '../../../core/models/apiResult';
+import { environment } from '../../../../environments/environment';
+import {
+  Category,
+  CategoryWithHierarchy,
+} from '../interfaces/category.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -16,19 +20,23 @@ export class CategoryService {
   constructor(private http: HttpClient) {}
 
   getCategories() {
-    return this.http.get<ApiResult<Category[]>>(this.getAllCategoriesEndpoint).pipe(
-      map((response: ApiResult<Category[]>) => {
-        return response;
-      }),
-      catchError((error) => {
-        throw error;
-      })
-    );
+    return this.http
+      .get<ApiResult<Category[]>>(this.getAllCategoriesEndpoint)
+      .pipe(
+        map((response: ApiResult<Category[]>) => {
+          return response;
+        }),
+        catchError((error) => {
+          throw error;
+        })
+      );
   }
 
   getCategoriesHierarchy() {
     return this.http
-      .get<ApiResult<CategoryWithHierarchy[]>>(this.getCategoriesHierarchyEndpoint)
+      .get<ApiResult<CategoryWithHierarchy[]>>(
+        this.getCategoriesHierarchyEndpoint
+      )
       .pipe(
         map((response: ApiResult<CategoryWithHierarchy[]>) => {
           return response;

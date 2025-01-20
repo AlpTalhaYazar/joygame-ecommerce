@@ -2,14 +2,15 @@ import { NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
 
+import { Subscription } from 'rxjs';
+
+import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
-import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzAvatarComponent } from 'ng-zorro-antd/avatar';
 
 import { AuthService } from './core/services/auth.service';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -39,15 +40,13 @@ export class AppComponent implements OnInit {
   async ngOnInit() {
     this.isLoggedIn = this.authService.isUserLoggedIn();
 
-    this.authSubscription = this.authService.currentUser$.subscribe(
-      (user) => {
-        this.isLoggedIn = !!user;
-        if (user) {
-          this.firstName = user.firstName;
-          this.lastName = user.lastName;
-        }
+    this.authSubscription = this.authService.currentUser$.subscribe((user) => {
+      this.isLoggedIn = !!user;
+      if (user) {
+        this.firstName = user.firstName;
+        this.lastName = user.lastName;
       }
-    );
+    });
   }
 
   async ngOnDestroy() {

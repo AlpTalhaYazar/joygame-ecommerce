@@ -1,4 +1,4 @@
-<div class="category-listing h-full overflow-hidden">
+<div class="category-listing h-full overflow-hidden flex flex-col">
   <div class="page-header sticky-header">
     <div
       class="header-content flex flex-col md:flex-row justify-between items-center"
@@ -35,7 +35,7 @@
     </div>
   </div>
 
-  <div class="categories-grid h-full overflow-scroll p-4 pb-36">
+  <div class="categories-grid overflow-x-auto p-4 flex-1">
     <nz-spin [nzSpinning]="loading">
       <ng-container *ngIf="filteredCategories.length > 0; else noData">
         <nz-row [nzGutter]="[16, 16]">

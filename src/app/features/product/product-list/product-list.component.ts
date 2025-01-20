@@ -1,8 +1,13 @@
-import { Component } from '@angular/core';
-import { AuthService } from '../../../core/services/auth.service';
-import { ProductService } from '../services/product.service';
+import { NgForOf, NgIf } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+
+import { NzSpinComponent } from 'ng-zorro-antd/spin';
+import { NzEmptyComponent } from 'ng-zorro-antd/empty';
+import { NzTooltipDirective } from 'ng-zorro-antd/tooltip';
+import { NzPaginationComponent } from 'ng-zorro-antd/pagination';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { Product } from '../interfaces/product.interface';
+import { NzColDirective, NzRowDirective } from 'ng-zorro-antd/grid';
 import {
   NzBreadCrumbComponent,
   NzBreadCrumbItemComponent,
@@ -11,14 +16,16 @@ import {
   NzInputGroupComponent,
   NzInputGroupWhitSuffixOrPrefixDirective,
 } from 'ng-zorro-antd/input';
-import { FormsModule } from '@angular/forms';
-import {NzOptionComponent, NzOptionGroupComponent, NzSelectComponent} from 'ng-zorro-antd/select';
-import { NzSpinComponent } from 'ng-zorro-antd/spin';
-import { NgForOf, NgIf } from '@angular/common';
-import { NzColDirective, NzRowDirective } from 'ng-zorro-antd/grid';
+import {
+  NzOptionComponent,
+  NzOptionGroupComponent,
+  NzSelectComponent,
+} from 'ng-zorro-antd/select';
+
 import { ProductCardComponent } from '../product-card/product-card.component';
-import { NzEmptyComponent } from 'ng-zorro-antd/empty';
-import { NzPaginationComponent } from 'ng-zorro-antd/pagination';
+import { AuthService } from '../../../core/services/auth.service';
+import { ProductService } from '../services/product.service';
+import { Product } from '../interfaces/product.interface';
 import { CategoryService } from '../../category/services/category.service';
 
 @Component({
@@ -40,17 +47,18 @@ import { CategoryService } from '../../category/services/category.service';
     NzEmptyComponent,
     NzPaginationComponent,
     NzOptionGroupComponent,
+    NzTooltipDirective,
   ],
   templateUrl: './product-list.component.html',
   styleUrl: './product-list.component.scss',
 })
-export class ProductListComponent {
+export class ProductListComponent implements OnInit {
   loading = false;
   products: Product[] = [];
   filteredProducts: Product[] = [];
+
   parentCategories: { id: number; name: string }[] | [] = [];
   childCategories: { id: number; name: string }[] | [] = [];
-  categories: { id: string; name: string }[] = [];
 
   pageIndex = 1;
   pageSize = 12;
@@ -66,15 +74,20 @@ export class ProductListComponent {
     private notification: NzNotificationService
   ) {}
 
-  ngOnInit(): void {
-    this.loadProducts();
-    this.loadCategories();
+  async ngOnInit(): Promise<void> {
+    await this.loadProducts();
+    await this.loadCategories();
   }
 
-  loadProducts(): void {
+  async loadProducts(): Promise<void> {
     this.loading = true;
     this.productService
-      .getProductsWithCategories(this.pageIndex, this.pageSize, this.selectedCategory, this.searchText)
+      .getProductsWithCategories(
+        this.pageIndex,
+        this.pageSize,
+        this.selectedCategory,
+        this.searchText
+      )
       .subscribe({
         next: (response) => {
           if (response.isSuccess) {
@@ -102,7 +115,7 @@ export class ProductListComponent {
       });
   }
 
-  loadCategories(): void {
+  async loadCategories(): Promise<void> {
     this.loading = true;
     this.categoryService.getCategories().subscribe({
       next: (response) => {
@@ -122,30 +135,17 @@ export class ProductListComponent {
     });
   }
 
-  onSearch(): void {
+  async onSearch(): Promise<void> {
+    this.pageIndex = 1;
     this.loadProducts();
   }
 
-  onCategoryChange(): void {
+  async onCategoryChange(): Promise<void> {
+    this.pageIndex = 1;
     this.loadProducts();
   }
 
-  filterProducts(): void {
-    let filtered = [...this.products];
-
-    if (this.searchText) {
-      const searchLower = this.searchText.toLowerCase();
-      filtered = filtered.filter(
-        (product) =>
-          product.productName.toLowerCase().includes(searchLower) ||
-          product.productDescription.toLowerCase().includes(searchLower)
-      );
-    }
-
-    this.filteredProducts = filtered;
-  }
-
-  onPageSizeChange(): void {
+  async onPageSizeChange(): Promise<void> {
     this.pageIndex = 1;
     this.loadProducts();
   }

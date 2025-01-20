@@ -9,9 +9,9 @@
     </div>
 
     <div class="filters flex flex-col md:flex-row justify-center">
-      <nz-input-group [nzSuffix]="suffixIconSearch" class="search-input flex-1">
+      <nz-input-group [nzSuffix]="suffixIconSearch" class="search-input flex-1" nz-tooltip="Search by name, description, or category">
         <input
-          class="w-full"
+          class="w-full outline-none"
           type="text"
           nz-input
           placeholder="Search products"
@@ -40,7 +40,7 @@
           >
           </nz-option>
         </nz-option-group>
-        
+
         <nz-option-group
           nzLabel="Categories"
         >
@@ -54,7 +54,7 @@
     </div>
   </div>
 
-  <div class="products-grid h-full overflow-auto flex-1 p-4">
+  <div class="products-grid h-full overflow-x-auto flex-1 p-4">
     <nz-spin [nzSpinning]="loading">
       <ng-container *ngIf="filteredProducts.length > 0; else noData">
         <nz-row [nzGutter]="[24, 24]" class="flex justify-center">
