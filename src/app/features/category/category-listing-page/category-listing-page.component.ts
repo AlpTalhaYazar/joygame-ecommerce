@@ -65,7 +65,7 @@ export class CategoryListingPageComponent implements OnInit {
     this.loading = true;
     this.categoryService.getCategoriesHierarchy().subscribe({
       next: async (response) => {
-        if (response.isSuccess) {
+        if (response.success) {
           this.categories = response.data;
           await this.filterCategories();
         } else {

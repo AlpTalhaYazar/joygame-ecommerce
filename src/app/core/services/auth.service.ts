@@ -44,7 +44,7 @@ export class AuthService {
       })
       .pipe(
         map((response) => {
-          if (response.isSuccess && response.data) {
+          if (response.success && response.data) {
             // Store token
             localStorage.setItem('token', response.data.token);
             // Store user data

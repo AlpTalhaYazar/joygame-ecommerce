@@ -90,10 +90,10 @@ export class ProductListComponent implements OnInit {
       )
       .subscribe({
         next: (response) => {
-          if (response.isSuccess) {
+          if (response.success) {
             this.products = response.data;
             this.filteredProducts = this.products;
-            this.total = response.total;
+            this.total = response.pagination?.totalCount ?? 0;
           } else {
             this.notification.error(
               'Failed to load products',
@@ -119,7 +119,7 @@ export class ProductListComponent implements OnInit {
     this.loading = true;
     this.categoryService.getCategories().subscribe({
       next: (response) => {
-        if (response.isSuccess) {
+        if (response.success) {
           this.parentCategories =
             response.data
               ?.filter((category) => category.parentId === null)

@@ -1,17 +1,21 @@
 export class ApiResult<T> {
-  public isSuccess: boolean = false;
+  public success: boolean = false;
   public data: T | null = null;
+  public message: string | null = null;
   public error: {
+    code: number | null;
     message: string | null;
     details: string[] | null;
   } | null = null;
 }
 
 export class PaginationApiResult<T> extends ApiResult<T> {
-  public page: number = 1;
-  public limit: number = 10;
-  public total: number = 0;
-  public totalPages: number = 0;
-  public hasNext: boolean = false;
-  public hasPrevious: boolean = false;
+  public pagination: {
+    page: number | null;
+    pageSize: number | null;
+    totalCount: number | null;
+    totalPages: number | null;
+    hasPrevious: boolean | null;
+    hasNext: boolean | null;
+  } | null = null;
 }
