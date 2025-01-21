@@ -7,7 +7,6 @@ import { NzSpinComponent } from 'ng-zorro-antd/spin';
 import { NzCardComponent } from 'ng-zorro-antd/card';
 import { NzEmptyComponent } from 'ng-zorro-antd/empty';
 import { NzAvatarComponent } from 'ng-zorro-antd/avatar';
-import { NzDividerComponent } from 'ng-zorro-antd/divider';
 import { ProductCardComponent } from '../../product/product-card/product-card.component';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { CategoryCardComponent } from '../category-card/category-card.component';
@@ -71,7 +70,7 @@ export class CategoryDetailComponent implements OnInit {
     private notification: NzNotificationService
   ) {}
 
-  ngOnInit() {
+  async ngOnInit(): Promise<void> {
     this.route.params.subscribe((params) => {
       const slug = this.route.snapshot.paramMap.get('slug');
       console.log('slug:', slug);
@@ -81,20 +80,20 @@ export class CategoryDetailComponent implements OnInit {
     });
   }
 
-  loadCategoryData(slug: string) {
+  async loadCategoryData(slug: string): Promise<void> {
     this.loading = true;
 
-    this.categoryService.getCategoryTree(slug).subscribe((response) => {
+    this.categoryService.getCategoryTree(slug).subscribe(async (response) => {
       this.category = response;
-      this.childCategories = this.converCategortTreeToCategoryHierarchy(
+      this.childCategories = await this.converCategoryTreeToCategoryHierarchy(
         response?.children || []
       );
-      this.loadProducts(response?.id || 0);
+      await this.loadProducts(response?.id || 0);
       this.loading = false;
     });
   }
 
-  loadProducts(categoryId: number) {
+  async loadProducts(categoryId: number): Promise<void> {
     this.productService.getProductByCategoryId(categoryId).subscribe(
       (response) => {
         response.forEach((product: any) => {
@@ -114,9 +113,9 @@ export class CategoryDetailComponent implements OnInit {
     );
   }
 
-  converCategortTreeToCategoryHierarchy(
+  async converCategoryTreeToCategoryHierarchy(
     tree: CategoryTreeDto[]
-  ): CategoryWithHierarchy[] {
+  ): Promise<CategoryWithHierarchy[]> {
     const hierarchy: CategoryWithHierarchy[] = [];
 
     tree.forEach((node) => {
@@ -125,11 +124,11 @@ export class CategoryDetailComponent implements OnInit {
     return hierarchy;
   }
 
-  flattenCategoryTree(
+  async flattenCategoryTree(
     node: CategoryTreeDto,
     hierarchy: CategoryWithHierarchy[],
     level: number
-  ) {
+  ): Promise<void> {
     const category: CategoryWithHierarchy = {
       id: node.id,
       name: node.name,
@@ -141,8 +140,8 @@ export class CategoryDetailComponent implements OnInit {
       imageUrl: '',
     };
     hierarchy.push(category);
-    node.children.forEach((child) => {
-      this.flattenCategoryTree(child, hierarchy, level + 1);
+    node.children.forEach(async (child) => {
+      await this.flattenCategoryTree(child, hierarchy, level + 1);
     });
   }
 }

@@ -32,23 +32,4 @@ export class CategoryCardComponent {
     this.canManageCategory = this.authService.hasPermission('category_manage');
     this.environment = environment;
   }
-
-  getCategoryIcon(): string {
-    const iconMap: { [key: string]: string } = {
-      Games: 'play-circle',
-      Consoles: 'desktop',
-      Accessories: 'tool',
-      Merchandise: 'shopping',
-      Controllers: 'control',
-      Headsets: 'audio',
-      Keyboards: 'laptop',
-      'Action Games': 'thunderbolt',
-      'RPG Games': 'crown',
-      'Sports Games': 'trophy',
-      'Puzzle Games': 'puzzle',
-      'Shooter Games': 'aim',
-    };
-
-    return iconMap[this.category.name] || 'folder';
-  }
 }

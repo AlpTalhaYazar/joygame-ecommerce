@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { NgIf } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { NzTagComponent } from 'ng-zorro-antd/tag';
@@ -10,9 +11,8 @@ import {
   NzBreadCrumbItemComponent,
 } from 'ng-zorro-antd/breadcrumb';
 
-import { ProductService } from '../services/product.service';
 import { Product } from '../interfaces/product.interface';
-import { NgIf } from '@angular/common';
+import { ProductService } from '../services/product.service';
 import { NzTooltipDirective } from 'ng-zorro-antd/tooltip';
 
 @Component({
@@ -30,7 +30,7 @@ import { NzTooltipDirective } from 'ng-zorro-antd/tooltip';
   templateUrl: './product-detail.component.html',
   styleUrl: './product-detail.component.scss',
 })
-export class ProductDetailComponent {
+export class ProductDetailComponent implements OnInit {
   product: Product | null = null;
 
   constructor(
@@ -40,12 +40,12 @@ export class ProductDetailComponent {
     private notification: NzNotificationService
   ) {}
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     const productSlug = this.route.snapshot.params['slug'];
-    this.loadProduct(productSlug);
+    await this.loadProduct(productSlug);
   }
 
-  loadProduct(slug: string): void {
+  async loadProduct(slug: string): Promise<void> {
     this.productService.getProductBySlugDetail(slug).subscribe({
       next: (product) => {
         this.product = product;

@@ -1,5 +1,5 @@
-import { NgForOf, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { NgForOf, NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 
 import { NzSpinComponent } from 'ng-zorro-antd/spin';
@@ -23,12 +23,12 @@ import {
   NzSelectComponent,
 } from 'ng-zorro-antd/select';
 
-import { ProductCardComponent } from '../product-card/product-card.component';
+import { Product } from '../interfaces/product.interface';
 import { AuthService } from '../../../core/services/auth.service';
 import { ProductService } from '../services/product.service';
-import { Product } from '../interfaces/product.interface';
-import { CategoryService } from '../../category/services/category.service';
 import { NzIconDirective } from 'ng-zorro-antd/icon';
+import { CategoryService } from '../../category/services/category.service';
+import { ProductCardComponent } from '../product-card/product-card.component';
 
 @Component({
   selector: 'app-product-list',
