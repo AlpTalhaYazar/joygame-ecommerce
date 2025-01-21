@@ -1,22 +1,47 @@
 <div class="login-container">
   <nz-card nzTitle="Login">
-    <form nz-form (ngSubmit)="onSubmit()" style="display: flex; flex-direction: column; gap: 8px;">
+    <form
+      nz-form
+      (ngSubmit)="onSubmit()"
+      style="display: flex; flex-direction: column; gap: 8px"
+    >
       <nz-form-item>
         <nz-form-control nzErrorTip="Please input your username!">
           <nz-input-group nzPrefixIcon="user">
-            <input type="text" nz-input [(ngModel)]="username" name="username" placeholder="Username" required/>
+            <input
+              type="text"
+              nz-input
+              [(ngModel)]="username"
+              name="username"
+              placeholder="Username"
+              required
+            />
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
         <nz-form-control nzErrorTip="Please input your password!">
           <nz-input-group nzPrefixIcon="lock">
-            <input type="password" nz-input [(ngModel)]="password" name="password" placeholder="Password" required/>
+            <input
+              type="password"
+              nz-input
+              [(ngModel)]="password"
+              name="password"
+              placeholder="Password"
+              required
+            />
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
       <button nz-button nzType="primary" nzBlock>Log in</button>
-      <a nz-button nzType="link" routerLink="/forgot-password" style="padding: 4px;">Forgot Password?</a>
+      <a
+        nz-button
+        nzType="link"
+        routerLink="/forgot-password"
+        style="padding: 4px"
+      >
+        Forgot Password?
+      </a>
     </form>
   </nz-card>
 </div>
