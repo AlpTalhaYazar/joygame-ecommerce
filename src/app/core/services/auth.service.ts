@@ -11,7 +11,12 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 
 import { ApiResult } from '../models/apiResult';
 import { environment } from '../../../environments/environment';
-import { LoginResponse, LoginResponseUser } from '../models/auth.models';
+import {
+  LoginResponse,
+  LoginResponseUser,
+  ResetPasswordRequest,
+  ForgotPasswordResponse,
+} from '../models/auth.models';
 
 @Injectable({
   providedIn: 'root',
@@ -126,5 +131,19 @@ export class AuthService {
         subscription.unsubscribe();
       },
     });
+  }
+
+  forgotPassword(email: string) {
+    return this.http.post<ApiResult<ForgotPasswordResponse>>(
+      `${environment.apiUrl}/api/auth/forgot-password`,
+      { email }
+    );
+  }
+
+  resetPassword(request: ResetPasswordRequest) {
+    return this.http.post<ApiResult<boolean>>(
+      `${environment.apiUrl}/api/auth/reset-password`,
+      request
+    );
   }
 }

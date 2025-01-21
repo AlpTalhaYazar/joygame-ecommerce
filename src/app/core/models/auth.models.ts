@@ -12,3 +12,15 @@ export interface LoginResponseUser {
   businessStatus: number;
   roles: string[];
 }
+
+export interface ForgotPasswordResponse {
+  resetToken: string;
+  expiryDate: Date;
+  email: string;
+}
+
+export interface ResetPasswordRequest {
+  email: string;
+  resetToken: string;
+  newPassword: string;
+}
