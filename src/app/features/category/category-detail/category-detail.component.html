@@ -1,0 +1,87 @@
+<div class="category-detail h-full overflow-hidden flex flex-col">
+  <div class="page-header sticky-header">
+    <nz-breadcrumb>
+      <nz-breadcrumb-item>Home</nz-breadcrumb-item>
+      <nz-breadcrumb-item>
+        <a [routerLink]="['/app/categories']">Categories</a>
+      </nz-breadcrumb-item>
+      <nz-breadcrumb-item>{{ category?.name }}</nz-breadcrumb-item>
+    </nz-breadcrumb>
+  </div>
+
+  <div class="content-wrapper p-4">
+    <nz-spin [nzSpinning]="loading">
+      <nz-card class="mb-6" *ngIf="category">
+        <div class="flex items-center gap-4">
+          <nz-avatar
+            [nzShape]="'square'"
+            [nzSize]="96"
+            [nzSrc]="environment.apiUrl + '/images/categories/' + category.slug + '.png'"
+          ></nz-avatar>
+          <div>
+            <h1 class="text-2xl font-bold mb-2">{{ category.name }}</h1>
+            <p class="text-gray-600">{{ category.description }}</p>
+          </div>
+        </div>
+      </nz-card>
+
+      <nz-collapse [nzBordered]="false">
+        <nz-collapse-panel
+          *ngIf="childCategories?.length"
+          [nzHeader]="subCategoriesHeader"
+          [nzActive]="true"
+          class="site-collapse-custom-panel"
+        >
+          <ng-template #subCategoriesHeader>
+            <div class="panel-header">
+              <span class="text-xl font-semibold">Sub Categories</span>
+              <span class="text-gray-500">({{ childCategories.length }} categories)</span>
+            </div>
+          </ng-template>
+
+          <nz-row [nzGutter]="[16, 16]">
+            <nz-col
+              [nzXs]="24"
+              [nzSm]="12"
+              [nzMd]="8"
+              [nzLg]="6"
+              *ngFor="let childCategory of childCategories"
+            >
+              <app-category-card [category]="childCategory"></app-category-card>
+            </nz-col>
+          </nz-row>
+        </nz-collapse-panel>
+
+        <nz-collapse-panel
+          *ngIf="products?.length"
+          [nzHeader]="productsHeader"
+          [nzActive]="true"
+          class="site-collapse-custom-panel"
+        >
+          <ng-template #productsHeader>
+            <div class="panel-header">
+              <span class="text-xl font-semibold">Products</span>
+              <span class="text-gray-500">({{ products.length }} items)</span>
+            </div>
+          </ng-template>
+
+          <nz-row [nzGutter]="[24, 24]">
+            <nz-col
+              [nzMd]="24"
+              [nzLg]="12"
+              [nzXl]="8"
+              [nzXXl]="6"
+              *ngFor="let product of products"
+            >
+              <app-product-card [product]="product"></app-product-card>
+            </nz-col>
+          </nz-row>
+        </nz-collapse-panel>
+      </nz-collapse>
+
+      <ng-container *ngIf="!products?.length && !loading">
+        <nz-empty nzNotFoundContent="No products found in this category"></nz-empty>
+      </ng-container>
+    </nz-spin>
+  </div>
+</div>

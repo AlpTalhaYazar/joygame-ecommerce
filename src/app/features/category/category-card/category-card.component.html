@@ -1,7 +1,7 @@
 <nz-card
   [nzHoverable]="true"
   class="category-card"
-  [routerLink]="['/app/categories', category.id]"
+  [routerLink]="['/app/categories', category.slug]"
 >
   <div class="category-icon">
     <nz-avatar [nzShape]="'square'" [nzSize]="64" [nzSrc]="environment.apiUrl + '/images/categories/' + category.slug + '.png'"></nz-avatar>

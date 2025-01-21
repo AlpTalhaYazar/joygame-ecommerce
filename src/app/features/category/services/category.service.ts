@@ -7,6 +7,7 @@ import { ApiResult } from '../../../core/models/apiResult';
 import { environment } from '../../../../environments/environment';
 import {
   Category,
+  CategoryTreeDto,
   CategoryWithHierarchy,
 } from '../interfaces/category.interface';
 
@@ -14,17 +15,50 @@ import {
   providedIn: 'root',
 })
 export class CategoryService {
-  getAllCategoriesEndpoint = `${environment.apiUrl}/api/category`;
-  getCategoriesHierarchyEndpoint = `${environment.apiUrl}/api/category/hierarchy`;
+  apiCategoryBaseUrl = `${environment.apiUrl}/api/category`;
+  getCategoriesHierarchyEndpoint = `${this.apiCategoryBaseUrl}/hierarchy`;
+  getCategoryTreeEndpoint = `${this.apiCategoryBaseUrl}/tree`;
 
   constructor(private http: HttpClient) {}
 
   getCategories() {
+    return this.http.get<ApiResult<Category[]>>(this.apiCategoryBaseUrl).pipe(
+      map((response: ApiResult<Category[]>) => {
+        return response;
+      }),
+      catchError((error) => {
+        throw error;
+      })
+    );
+  }
+
+  getCategoryBySlug(slug: string) {
     return this.http
-      .get<ApiResult<Category[]>>(this.getAllCategoriesEndpoint)
+      .get<ApiResult<CategoryWithHierarchy>>(
+        `${this.apiCategoryBaseUrl}/${slug}`
+      )
       .pipe(
-        map((response: ApiResult<Category[]>) => {
+        map((response: ApiResult<CategoryWithHierarchy>) => {
           return response;
+        }),
+        catchError((error) => {
+          throw error;
+        })
+      );
+  }
+
+  getCategoryTree(slug: string) {
+    return this.http
+      .get<ApiResult<CategoryTreeDto[]>>(this.getCategoryTreeEndpoint, {
+        params: { slug },
+      })
+      .pipe(
+        map((response: ApiResult<CategoryTreeDto[]>) => {
+          if (response.data) {
+            return response.data[0];
+          } else {
+            return null;
+          }
         }),
         catchError((error) => {
           throw error;

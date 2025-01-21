@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { CategoryCardComponent } from './category-card/category-card.component';
 import { CategoryListingPageComponent } from './category-listing-page/category-listing-page.component';
+import { CategoryDetailComponent } from './category-detail/category-detail.component';
 
 const routes: Routes = [
   {
@@ -11,7 +11,7 @@ const routes: Routes = [
   },
   {
     path: ':slug',
-    component: CategoryCardComponent,
+    component: CategoryDetailComponent,
   },
 ];
 

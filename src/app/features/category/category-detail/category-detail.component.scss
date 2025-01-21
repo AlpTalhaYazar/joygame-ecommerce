@@ -1,0 +1,42 @@
+.category-detail {
+  background-color: #f0f2f5;
+}
+
+.page-header {
+  padding: 16px 24px;
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.09);
+}
+
+.content-wrapper {
+  flex: 1;
+  overflow-y: auto;
+}
+
+:host ::ng-deep .ant-card {
+  border-radius: 8px;
+}
+
+:host ::ng-deep {
+  .site-collapse-custom-panel {
+    margin-bottom: 24px;
+    overflow: hidden;
+    background: #ffffff;
+    border: none;
+    border-radius: 8px;
+
+    .ant-collapse-header {
+      padding: 16px 24px !important;
+    }
+
+    .ant-collapse-content {
+      border-top: none;
+    }
+  }
+
+  .panel-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+}

@@ -10,15 +10,15 @@ import { ApiResult, PaginationApiResult } from '../../../core/models/apiResult';
   providedIn: 'root',
 })
 export class ProductService {
-  getAllProductsEndpoint = `${environment.apiUrl}/api/product`;
-  getProductByIdDetailedEndpoint = `${environment.apiUrl}/api/product/detailed`;
-  getProductBySlugDetailedEndpoint = `${environment.apiUrl}/api/product`;
-  getProductsWithCategoriesEndpoint = `${environment.apiUrl}/api/product/with-categories`;
+  apiProductBaseUrl = `${environment.apiUrl}/api/product`;
+  getProductByCategoryIdEndpoint = `${this.apiProductBaseUrl}/category`;
+  getProductByIdDetailedEndpoint = `${this.apiProductBaseUrl}/detailed`;
+  getProductsWithCategoriesEndpoint = `${this.apiProductBaseUrl}/with-categories`;
 
   constructor(private http: HttpClient) {}
 
   getProducts() {
-    return this.http.get(this.getAllProductsEndpoint);
+    return this.http.get(this.apiProductBaseUrl);
   }
 
   getProductByIdDetail(id: number) {
@@ -34,9 +34,24 @@ export class ProductService {
       );
   }
 
+  getProductByCategoryId(categoryId: number) {
+    return this.http
+      .get<ApiResult<any>>(
+        `${this.getProductByCategoryIdEndpoint}/${categoryId}`
+      )
+      .pipe(
+        map((response: ApiResult<any>) => {
+          return response.data;
+        }),
+        catchError((error) => {
+          throw error;
+        })
+      );
+  }
+
   getProductBySlugDetail(slug: string) {
     return this.http
-      .get<ApiResult<any>>(`${this.getProductBySlugDetailedEndpoint}/${slug}`)
+      .get<ApiResult<any>>(`${this.apiProductBaseUrl}/${slug}`)
       .pipe(
         map((response: ApiResult<any>) => {
           return response.data;

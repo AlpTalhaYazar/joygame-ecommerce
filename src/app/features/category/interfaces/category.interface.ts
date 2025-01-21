@@ -19,3 +19,12 @@ export interface CategoryWithHierarchy {
   level: number;
   imageUrl: string;
 }
+
+export interface CategoryTreeDto {
+  id: number;
+  name: string;
+  description: string | null;
+  slug: string;
+  parentId: number | null;
+  children: CategoryTreeDto[];
+}
