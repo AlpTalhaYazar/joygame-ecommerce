@@ -1,1 +1,51 @@
-<p>product-detail works!</p>
+<div class="product-detail" *ngIf="product">
+  <div class="page-header">
+    <nz-breadcrumb>
+      <nz-breadcrumb-item>Home</nz-breadcrumb-item>
+      <nz-breadcrumb-item>
+        <a [routerLink]="['/app/products']">Products</a>
+      </nz-breadcrumb-item>
+      <nz-breadcrumb-item>
+        <a [routerLink]="['/app/categories', product.categoryId]">{{
+          product.categoryName
+        }}</a>
+      </nz-breadcrumb-item>
+      <nz-breadcrumb-item>{{ product.productName }}</nz-breadcrumb-item>
+    </nz-breadcrumb>
+  </div>
+
+  <nz-card>
+    <div class="product-content">
+      <div class="product-header">
+        <h1>{{ product.productName }}</h1>
+        <nz-tag [nzColor]="'blue'" [nz-tooltip]="product.categoryDescription">
+          {{ product.categoryName }}
+        </nz-tag>
+      </div>
+
+      <div class="price-stock">
+        <div class="price">${{ product.price.toFixed(2) }}</div>
+        <nz-tag [nzColor]="product.stockQuantity < 50 ? 'error' : 'success'">
+          {{ product.stockQuantity }} in stock
+        </nz-tag>
+      </div>
+
+      <div class="description">
+        <h2>Description</h2>
+        <p>{{ product.productDescription }}</p>
+      </div>
+
+      <div class="actions">
+        <button
+          nz-button
+          nzType="primary"
+          nzSize="large"
+          [disabled]="product.stockQuantity === 0"
+        >
+          Add to Cart
+        </button>
+        <button nz-button nzSize="large">Add to Wishlist</button>
+      </div>
+    </div>
+  </nz-card>
+</div>
