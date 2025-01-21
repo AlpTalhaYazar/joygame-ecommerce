@@ -9,7 +9,11 @@
     </div>
 
     <div class="filters flex flex-col md:flex-row justify-center">
-      <nz-input-group [nzSuffix]="suffixIconSearch" class="search-input flex-1" nz-tooltip="Search by name, description, or category">
+      <nz-input-group
+        [nzSuffix]="suffixIconSearch"
+        class="search-input flex-1"
+        nz-tooltip="Search by name, description or category"
+      >
         <input
           class="w-full outline-none"
           type="text"
@@ -30,9 +34,7 @@
         nzAllowClear
         nzPlaceHolder="Filter by category"
       >
-        <nz-option-group
-          nzLabel="Parent Categories"
-        >
+        <nz-option-group nzLabel="Parent Categories">
           <nz-option
             *ngFor="let category of parentCategories"
             [nzValue]="category.id"
@@ -41,9 +43,7 @@
           </nz-option>
         </nz-option-group>
 
-        <nz-option-group
-          nzLabel="Categories"
-        >
+        <nz-option-group nzLabel="Categories">
           <nz-option
             *ngFor="let category of childCategories"
             [nzValue]="category.id"
@@ -61,6 +61,7 @@
           <nz-col
             [nzMd]="24"
             [nzLg]="12"
+            [nzXXl]="8"
             *ngFor="let product of filteredProducts"
             class="w-[95%]"
           >
@@ -76,15 +77,15 @@
     </nz-spin>
   </div>
 
-  <div class="pagination">
+  <div class="pagination w-full flex !justify-center p-4">
     <nz-pagination
       [nzTotal]="total"
       [(nzPageIndex)]="pageIndex"
       [(nzPageSize)]="pageSize"
-      [nzShowSizeChanger]="true"
       [nzShowQuickJumper]="true"
       (nzPageIndexChange)="loadProducts()"
       (nzPageSizeChange)="onPageSizeChange()"
+      nzSize="small"
     >
     </nz-pagination>
   </div>

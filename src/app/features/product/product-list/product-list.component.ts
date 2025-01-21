@@ -13,6 +13,7 @@ import {
   NzBreadCrumbItemComponent,
 } from 'ng-zorro-antd/breadcrumb';
 import {
+  NzInputDirective,
   NzInputGroupComponent,
   NzInputGroupWhitSuffixOrPrefixDirective,
 } from 'ng-zorro-antd/input';
@@ -27,6 +28,7 @@ import { AuthService } from '../../../core/services/auth.service';
 import { ProductService } from '../services/product.service';
 import { Product } from '../interfaces/product.interface';
 import { CategoryService } from '../../category/services/category.service';
+import { NzIconDirective } from 'ng-zorro-antd/icon';
 
 @Component({
   selector: 'app-product-list',
@@ -48,6 +50,8 @@ import { CategoryService } from '../../category/services/category.service';
     NzPaginationComponent,
     NzOptionGroupComponent,
     NzTooltipDirective,
+    NzInputDirective,
+    NzIconDirective,
   ],
   templateUrl: './product-list.component.html',
   styleUrl: './product-list.component.scss',
