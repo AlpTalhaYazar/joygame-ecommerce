@@ -3,7 +3,23 @@
   justify-content: center;
   align-items: center;
   height: 100%;
+
+  nz-card {
+    width: 400px;
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+  }
 }
-nz-card {
-  width: 300px;
+
+.additional-actions {
+  margin-top: 16px;
+  text-align: center;
+
+  a {
+    padding: 8px 0;
+  }
 }

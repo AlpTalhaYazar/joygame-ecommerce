@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { NzCardComponent } from 'ng-zorro-antd/card';
 import { NzButtonComponent } from 'ng-zorro-antd/button';
@@ -9,11 +9,14 @@ import {
   NzFormDirective,
   NzFormItemComponent,
 } from 'ng-zorro-antd/form';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 
 import { AuthService } from '../../../core/services/auth.service';
+import { LoginRequest } from '../../../core/models/auth.models';
 
 @Component({
   selector: 'app-login',
+  standalone: true,
   imports: [
     NzCardComponent,
     NzFormDirective,
@@ -29,19 +32,25 @@ import { AuthService } from '../../../core/services/auth.service';
   styleUrl: './login.component.scss',
 })
 export class LoginComponent {
-  username: string = '';
-  password: string = '';
+  credentials: LoginRequest = { username: '', password: '' };
+  isLoading = false;
 
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private notification: NzNotificationService,
+    private router: Router
+  ) {}
 
   async onSubmit(): Promise<void> {
-    this.authService.login(this.username, this.password).subscribe(
-      (response) => {
-        console.log(response);
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
+    this.isLoading = true;
+
+    try {
+      await this.authService.login(this.credentials).toPromise();
+      this.router.navigate(['/app/categories']);
+    } catch (error) {
+      console.error('Login error:', error);
+    } finally {
+      this.isLoading = false;
+    }
   }
 }

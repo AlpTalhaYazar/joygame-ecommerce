@@ -12,8 +12,9 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { ApiResult } from '../models/apiResult';
 import { environment } from '../../../environments/environment';
 import {
-  LoginResponse,
-  LoginResponseUser,
+  AuthUserDto,
+  LoginRequest,
+  AuthResponseDto,
   ResetPasswordRequest,
   ForgotPasswordResponse,
 } from '../models/auth.models';
@@ -22,9 +23,7 @@ import {
   providedIn: 'root',
 })
 export class AuthService {
-  private currentUserSubject = new BehaviorSubject<LoginResponseUser | null>(
-    null
-  );
+  private currentUserSubject = new BehaviorSubject<AuthUserDto | null>(null);
   private jwtHelper = new JwtHelperService();
 
   currentUser$ = this.currentUserSubject.asObservable();
@@ -41,23 +40,23 @@ export class AuthService {
     }
   }
 
-  login(username: string, password: string) {
+  login(credentials: LoginRequest) {
     return this.http
-      .post<ApiResult<LoginResponse>>(`${environment.apiUrl}/api/auth/login`, {
-        username,
-        password,
-      })
+      .post<ApiResult<AuthResponseDto>>(
+        `${environment.apiUrl}/api/auth/login`,
+        credentials
+      )
       .pipe(
         map((response) => {
           if (response.success && response.data) {
+            const { token: Token, user: User } = response.data;
+
             // Store token
-            localStorage.setItem('token', response.data.token);
+            localStorage.setItem('token', Token);
+
             // Store user data
-            localStorage.setItem(
-              'currentUser',
-              JSON.stringify(response.data.user)
-            );
-            this.currentUserSubject.next(response.data.user);
+            localStorage.setItem('currentUser', JSON.stringify(User));
+            this.currentUserSubject.next(User);
 
             this.successfullLoginNotification(response);
           }
@@ -67,7 +66,6 @@ export class AuthService {
           const errorMessage =
             error.error?.error?.message || 'An unknown error occurred';
           this.notification.error('Login failed', errorMessage);
-
           return throwError(() => error);
         })
       );
@@ -100,11 +98,11 @@ export class AuthService {
     return this.currentUserSubject.value !== null;
   }
 
-  getCurrentUser(): LoginResponseUser | null {
+  getCurrentUser(): AuthUserDto | null {
     return this.currentUserSubject.value;
   }
 
-  successfullLoginNotification(response: ApiResult<LoginResponse>) {
+  successfullLoginNotification(response: ApiResult<AuthResponseDto>) {
     const initialCount = 3;
     const countdown$ = interval(1000).pipe(
       takeWhile((val) => initialCount - val >= 0)

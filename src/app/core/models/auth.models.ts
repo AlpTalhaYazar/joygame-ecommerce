@@ -1,18 +1,3 @@
-export interface LoginResponse {
-  token: string;
-  user: LoginResponseUser;
-}
-
-export interface LoginResponseUser {
-  id: number;
-  username: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  businessStatus: number;
-  roles: string[];
-}
-
 export interface ForgotPasswordResponse {
   resetToken: string;
   expiryDate: Date;
@@ -23,4 +8,24 @@ export interface ResetPasswordRequest {
   email: string;
   resetToken: string;
   newPassword: string;
+}
+
+export interface LoginRequest {
+  username: string;
+  password: string;
+}
+
+export interface AuthResponseDto {
+  token: string;
+  user: AuthUserDto;
+}
+
+export interface AuthUserDto {
+  id: number;
+  username: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  businessStatus: number;
+  roles: string[];
 }
