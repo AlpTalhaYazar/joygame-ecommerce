@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { catchError, map, Observable } from 'rxjs';
+import { catchError, lastValueFrom, map, Observable } from 'rxjs';
 
 import { environment } from '../../../../environments/environment';
 import { ApiResult, PaginationApiResult } from '../../../core/models/apiResult';
@@ -17,57 +17,42 @@ export class ProductService {
 
   constructor(private http: HttpClient) {}
 
-  getProducts() {
-    return this.http.get(this.apiProductBaseUrl);
+  async getProducts() {
+    var response = this.http.get(this.apiProductBaseUrl);
+
+    return await lastValueFrom(response);
   }
 
-  getProductByIdDetail(id: number) {
-    return this.http
-      .get<ApiResult<any>>(`${this.getProductByIdDetailedEndpoint}/${id}`)
-      .pipe(
-        map((response: ApiResult<any>) => {
-          return response.data;
-        }),
-        catchError((error) => {
-          throw error;
-        })
-      );
+  async getProductByIdDetail(id: number) {
+    var response = this.http.get<ApiResult<any>>(
+      `${this.getProductByIdDetailedEndpoint}/${id}`
+    );
+
+    return await lastValueFrom(response);
   }
 
-  getProductByCategoryId(categoryId: number) {
-    return this.http
-      .get<ApiResult<any>>(
-        `${this.getProductByCategoryIdEndpoint}/${categoryId}`
-      )
-      .pipe(
-        map((response: ApiResult<any>) => {
-          return response.data;
-        }),
-        catchError((error) => {
-          throw error;
-        })
-      );
+  async getProductByCategoryId(categoryId: number) {
+    var response = this.http.get<ApiResult<any>>(
+      `${this.getProductByCategoryIdEndpoint}/${categoryId}`
+    );
+
+    return await lastValueFrom(response);
   }
 
-  getProductBySlugDetail(slug: string) {
-    return this.http
-      .get<ApiResult<any>>(`${this.apiProductBaseUrl}/${slug}`)
-      .pipe(
-        map((response: ApiResult<any>) => {
-          return response.data;
-        }),
-        catchError((error) => {
-          throw error;
-        })
-      );
+  async getProductBySlugDetail(slug: string) {
+    var response = this.http.get<ApiResult<any>>(
+      `${this.apiProductBaseUrl}/${slug}`
+    );
+
+    return await lastValueFrom(response);
   }
 
-  getProductsWithCategories(
+  async getProductsWithCategories(
     page: number,
     pageSize: number,
     categoryId: number | null,
     searchText: string | null
-  ): Observable<PaginationApiResult<any>> {
+  ): Promise<PaginationApiResult<any>> {
     const params: any = {
       page: page.toString(),
       pageSize: pageSize.toString(),
@@ -81,11 +66,13 @@ export class ProductService {
       params['searchText'] = searchText;
     }
 
-    return this.http.get<PaginationApiResult<any>>(
+    var response = this.http.get<PaginationApiResult<any>>(
       this.getProductsWithCategoriesEndpoint,
       {
         params,
       }
     );
+
+    return await lastValueFrom(response);
   }
 }

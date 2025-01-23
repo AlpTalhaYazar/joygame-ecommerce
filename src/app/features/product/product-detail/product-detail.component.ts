@@ -46,14 +46,15 @@ export class ProductDetailComponent implements OnInit {
   }
 
   async loadProduct(slug: string): Promise<void> {
-    this.productService.getProductBySlugDetail(slug).subscribe({
-      next: (product) => {
-        this.product = product;
-      },
-      error: (error) => {
-        this.notification.error('Error', 'Product not found');
-        this.router.navigate(['/app/products']);
-      },
-    });
+    var response = await this.productService.getProductBySlugDetail(slug);
+
+    if (response.success) {
+      this.product = response.data;
+    } else {
+      this.notification.error(
+        'Error',
+        response?.error?.message || 'An error occurred'
+      );
+    }
   }
 }

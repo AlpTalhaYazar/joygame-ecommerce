@@ -86,14 +86,12 @@ export class ProductListComponent implements OnInit {
 
   async loadProducts(): Promise<void> {
     this.loading = true;
-    var response = await this.productService
-      .getProductsWithCategories(
-        this.pageIndex,
-        this.pageSize,
-        this.selectedCategory,
-        this.searchText
-      )
-      .toPromise();
+    var response = await this.productService.getProductsWithCategories(
+      this.pageIndex,
+      this.pageSize,
+      this.selectedCategory,
+      this.searchText
+    );
 
     if (response?.success) {
       this.products = response.data;

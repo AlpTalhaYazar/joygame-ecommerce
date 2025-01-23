@@ -97,23 +97,24 @@ export class CategoryDetailComponent implements OnInit {
   }
 
   async loadProducts(categoryId: number): Promise<void> {
-    this.productService.getProductByCategoryId(categoryId).subscribe(
-      (response) => {
-        response.forEach((product: any) => {
-          product.productId = product.id;
-          product.productName = product.name;
-          product.productDescription = product.description;
-          product.productSlug = product.slug;
-        });
+    this.loading = true;
 
-        this.products = response;
-        this.loading = false;
-      },
-      (error) => {
-        this.notification.error('Error', 'Failed to load products');
-        this.loading = false;
-      }
-    );
+    var response = await this.productService.getProductByCategoryId(categoryId);
+
+    if (response.success) {
+      response.data.forEach((product: any) => {
+        product.productId = product.id;
+        product.productName = product.name;
+        product.productDescription = product.description;
+        product.productSlug = product.slug;
+      });
+
+      this.products = response.data;
+    } else {
+      this.notification.error('Error', response.message || 'An error occurred');
+    }
+
+    this.loading = false;
   }
 
   async converCategoryTreeToCategoryHierarchy(
