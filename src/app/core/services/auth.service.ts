@@ -5,7 +5,13 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 
 import { map } from 'rxjs/operators';
 import { catchError } from 'rxjs/operators';
-import { BehaviorSubject, throwError, interval, takeWhile } from 'rxjs';
+import {
+  BehaviorSubject,
+  throwError,
+  interval,
+  takeWhile,
+  Observable,
+} from 'rxjs';
 
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 
@@ -40,35 +46,17 @@ export class AuthService {
     }
   }
 
-  login(credentials: LoginRequest) {
-    return this.http
-      .post<ApiResult<AuthResponseDto>>(
-        `${environment.apiUrl}/api/auth/login`,
-        credentials
-      )
-      .pipe(
-        map((response) => {
-          if (response.success && response.data) {
-            const { token: Token, user: User } = response.data;
+  login(credentials: LoginRequest): Observable<ApiResult<AuthResponseDto>> {
+    return this.http.post<ApiResult<AuthResponseDto>>(
+      `${environment.apiUrl}/api/auth/login`,
+      credentials
+    );
+  }
 
-            // Store token
-            localStorage.setItem('token', Token);
-
-            // Store user data
-            localStorage.setItem('currentUser', JSON.stringify(User));
-            this.currentUserSubject.next(User);
-
-            this.successfullLoginNotification(response);
-          }
-          return response;
-        }),
-        catchError((error) => {
-          const errorMessage =
-            error.error?.error?.message || 'An unknown error occurred';
-          this.notification.error('Login failed', errorMessage);
-          return throwError(() => error);
-        })
-      );
+  setLoginData(response: AuthResponseDto) {
+    localStorage.setItem('token', response.token);
+    localStorage.setItem('currentUser', JSON.stringify(response.user));
+    this.currentUserSubject.next(response.user);
   }
 
   logout() {
@@ -102,35 +90,6 @@ export class AuthService {
     return this.currentUserSubject.value;
   }
 
-  successfullLoginNotification(response: ApiResult<AuthResponseDto>) {
-    const initialCount = 3;
-    const countdown$ = interval(1000).pipe(
-      takeWhile((val) => initialCount - val >= 0)
-    );
-
-    const subscription = countdown$.subscribe({
-      next: (val) => {
-        const remainingSeconds = initialCount - val;
-
-        this.notification.success(
-          'Login successful',
-          `Welcome back! ${response?.data?.user.firstName} ${response?.data?.user.lastName}, 
-           You will be redirecting to categories page in ${remainingSeconds}`,
-          { nzKey: 'login-success' }
-        );
-
-        if (remainingSeconds === 0) {
-          this.router.navigate(['app/categories']);
-          subscription.unsubscribe();
-        }
-      },
-      error: (error) => {
-        console.error(error);
-        subscription.unsubscribe();
-      },
-    });
-  }
-
   forgotPassword(email: string) {
     return this.http.post<ApiResult<ForgotPasswordResponse>>(
       `${environment.apiUrl}/api/auth/forgot-password`,
@@ -143,5 +102,25 @@ export class AuthService {
       `${environment.apiUrl}/api/auth/reset-password`,
       request
     );
+  }
+
+  async saveUsername(username: string): Promise<void> {
+    document.cookie = `username=${username}; path=/`;
+  }
+
+  async getUsername(): Promise<string | null> {
+    const cookies = document.cookie.split(';');
+    for (const cookie of cookies) {
+      const [name, value] = cookie.trim().split('=');
+      if (name === 'username') {
+        return value;
+      }
+    }
+    return null;
+  }
+
+  async clearUsername(): Promise<void> {
+    document.cookie =
+      'username=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
   }
 }

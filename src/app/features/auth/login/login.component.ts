@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+
 import { NzCardComponent } from 'ng-zorro-antd/card';
 import { NzButtonComponent } from 'ng-zorro-antd/button';
+import { NzCheckboxComponent } from 'ng-zorro-antd/checkbox';
 import { NzInputDirective, NzInputGroupComponent } from 'ng-zorro-antd/input';
 import {
   NzFormControlComponent,
@@ -27,12 +29,14 @@ import { LoginRequest } from '../../../core/models/auth.models';
     NzInputDirective,
     NzButtonComponent,
     RouterLink,
+    NzCheckboxComponent,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   credentials: LoginRequest = { username: '', password: '' };
+  rememberMe: boolean = false;
   isLoading = false;
 
   constructor(
@@ -41,14 +45,46 @@ export class LoginComponent {
     private router: Router
   ) {}
 
+  async ngOnInit(): Promise<void> {
+    const rememberedUsername = await this.authService.getUsername();
+    if (rememberedUsername) {
+      this.credentials.username = rememberedUsername;
+      this.rememberMe = true;
+    }
+  }
+
   async onSubmit(): Promise<void> {
     this.isLoading = true;
 
     try {
-      await this.authService.login(this.credentials).toPromise();
-      this.router.navigate(['/app/categories']);
-    } catch (error) {
+      var loginResponse = await this.authService
+        .login(this.credentials)
+        .toPromise();
+
+      if (loginResponse?.success && loginResponse.data) {
+        this.authService.setLoginData(loginResponse.data);
+
+        if (this.rememberMe) {
+          this.authService.saveUsername(this.credentials.username);
+          console.log('Username saved');
+        } else {
+          this.authService.clearUsername();
+        }
+
+        this.notification.success('Login successful', 'Welcome back!');
+        this.router.navigate(['/']);
+      } else {
+        this.notification.error(
+          'Login failed',
+          loginResponse?.error?.message || 'An error occurred'
+        );
+      }
+    } catch (error: any) {
       console.error('Login error:', error);
+      this.notification.error(
+        'Login failed',
+        error?.error?.error?.message || 'An error occurred'
+      );
     } finally {
       this.isLoading = false;
     }

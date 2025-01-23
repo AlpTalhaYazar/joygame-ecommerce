@@ -31,6 +31,14 @@
         </nz-form-control>
       </nz-form-item>
 
+      <nz-form-item>
+        <nz-form-control>
+          <label nz-checkbox [(ngModel)]="rememberMe" name="rememberMe">
+            Beni Hatırla
+          </label>
+        </nz-form-control>
+      </nz-form-item>
+
       <button nz-button nzType="primary" nzBlock [nzLoading]="isLoading">
         Log in
       </button>
