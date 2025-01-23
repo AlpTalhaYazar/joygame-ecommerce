@@ -57,9 +57,7 @@ export class LoginComponent implements OnInit {
     this.isLoading = true;
 
     try {
-      var loginResponse = await this.authService
-        .login(this.credentials)
-        .toPromise();
+      var loginResponse = await this.authService.login(this.credentials);
 
       if (loginResponse?.success && loginResponse.data) {
         this.authService.setLoginData(loginResponse.data);

@@ -51,11 +51,7 @@ export class CategoryListingPageComponent implements OnInit {
     private authService: AuthService,
     private categoryService: CategoryService,
     private notification: NzNotificationService
-  ) {
-    this.categoryService.getCategoriesHierarchy().subscribe((response) => {
-      console.log(response);
-    });
-  }
+  ) {}
 
   async ngOnInit(): Promise<void> {
     await this.loadCategories();
@@ -63,26 +59,20 @@ export class CategoryListingPageComponent implements OnInit {
 
   async loadCategories(): Promise<void> {
     this.loading = true;
-    this.categoryService.getCategoriesHierarchy().subscribe({
-      next: async (response) => {
-        if (response.success) {
-          this.categories = response.data;
-          await this.filterCategories();
-        } else {
-          this.notification.error(
-            response?.error?.message || 'Failed to load categories',
-            'Error'
-          );
-        }
-      },
-      error: (error) => {
-        this.notification.error('Failed to load categories', 'Error');
-        console.error('Error loading categories:', error);
-      },
-      complete: () => {
-        this.loading = false;
-      },
-    });
+
+    var response = await this.categoryService.getCategoriesHierarchy();
+
+    if (response.success) {
+      this.categories = response.data;
+      await this.filterCategories();
+    } else {
+      this.notification.error(
+        'Error',
+        response?.message ?? 'An error occurred'
+      );
+    }
+
+    this.loading = false;
   }
 
   async filterCategories(): Promise<void> {

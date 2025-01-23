@@ -83,14 +83,17 @@ export class CategoryDetailComponent implements OnInit {
   async loadCategoryData(slug: string): Promise<void> {
     this.loading = true;
 
-    this.categoryService.getCategoryTree(slug).subscribe(async (response) => {
-      this.category = response;
+    var response = await this.categoryService.getCategoryTree(slug);
+
+    if (response.success && response.data) {
+      this.category = response?.data[0];
       this.childCategories = await this.converCategoryTreeToCategoryHierarchy(
-        response?.children || []
+        this.category.children
       );
-      await this.loadProducts(response?.id || 0);
-      this.loading = false;
-    });
+      await this.loadProducts(this.category.id);
+    } else {
+      this.notification.error('Error', response.message || 'An error occurred');
+    }
   }
 
   async loadProducts(categoryId: number): Promise<void> {

@@ -38,37 +38,22 @@ export class CategoryService {
     return await lastValueFrom(response);
   }
 
-  getCategoryTree(slug: string) {
-    return this.http
-      .get<ApiResult<CategoryTreeDto[]>>(this.getCategoryTreeEndpoint, {
+  async getCategoryTree(slug: string): Promise<ApiResult<CategoryTreeDto[]>> {
+    var response = this.http.get<ApiResult<CategoryTreeDto[]>>(
+      this.getCategoryTreeEndpoint,
+      {
         params: { slug },
-      })
-      .pipe(
-        map((response: ApiResult<CategoryTreeDto[]>) => {
-          if (response.data) {
-            return response.data[0];
-          } else {
-            return null;
-          }
-        }),
-        catchError((error) => {
-          throw error;
-        })
-      );
+      }
+    );
+
+    return await lastValueFrom(response);
   }
 
-  getCategoriesHierarchy() {
-    return this.http
-      .get<ApiResult<CategoryWithHierarchy[]>>(
-        this.getCategoriesHierarchyEndpoint
-      )
-      .pipe(
-        map((response: ApiResult<CategoryWithHierarchy[]>) => {
-          return response;
-        }),
-        catchError((error) => {
-          throw error;
-        })
-      );
+  async getCategoriesHierarchy(): Promise<ApiResult<CategoryWithHierarchy[]>> {
+    var response = this.http.get<ApiResult<CategoryWithHierarchy[]>>(
+      this.getCategoriesHierarchyEndpoint
+    );
+
+    return await lastValueFrom(response);
   }
 }
