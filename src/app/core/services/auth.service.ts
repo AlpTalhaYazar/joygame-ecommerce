@@ -3,14 +3,15 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
-import { map } from 'rxjs/operators';
+import { last, map } from 'rxjs/operators';
 import { catchError } from 'rxjs/operators';
 import {
-  BehaviorSubject,
-  throwError,
   interval,
   takeWhile,
+  throwError,
   Observable,
+  lastValueFrom,
+  BehaviorSubject,
 } from 'rxjs';
 
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -46,11 +47,35 @@ export class AuthService {
     }
   }
 
-  login(credentials: LoginRequest): Observable<ApiResult<AuthResponseDto>> {
-    return this.http.post<ApiResult<AuthResponseDto>>(
+  async login(credentials: LoginRequest): Promise<ApiResult<AuthResponseDto>> {
+    var response = this.http.post<ApiResult<AuthResponseDto>>(
       `${environment.apiUrl}/api/auth/login`,
       credentials
     );
+
+    return await lastValueFrom(response);
+  }
+
+  async forgotPassword(
+    email: string
+  ): Promise<ApiResult<ForgotPasswordResponse>> {
+    var response = this.http.post<ApiResult<ForgotPasswordResponse>>(
+      `${environment.apiUrl}/api/auth/forgot-password`,
+      { email }
+    );
+
+    return await lastValueFrom(response);
+  }
+
+  async resetPassword(
+    request: ResetPasswordRequest
+  ): Promise<ApiResult<boolean>> {
+    var response = this.http.post<ApiResult<boolean>>(
+      `${environment.apiUrl}/api/auth/reset-password`,
+      request
+    );
+
+    return await lastValueFrom(response);
   }
 
   setLoginData(response: AuthResponseDto) {
@@ -88,20 +113,6 @@ export class AuthService {
 
   getCurrentUser(): AuthUserDto | null {
     return this.currentUserSubject.value;
-  }
-
-  forgotPassword(email: string) {
-    return this.http.post<ApiResult<ForgotPasswordResponse>>(
-      `${environment.apiUrl}/api/auth/forgot-password`,
-      { email }
-    );
-  }
-
-  resetPassword(request: ResetPasswordRequest) {
-    return this.http.post<ApiResult<boolean>>(
-      `${environment.apiUrl}/api/auth/reset-password`,
-      request
-    );
   }
 
   async saveUsername(username: string): Promise<void> {

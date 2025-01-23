@@ -62,13 +62,11 @@ export class ResetPasswordComponent {
 
     this.isLoading = true;
     try {
-      var resetPasswordResponse = await this.authService
-        .resetPassword({
-          email: this.email,
-          resetToken: this.resetToken,
-          newPassword: this.newPassword,
-        })
-        .toPromise();
+      var resetPasswordResponse = await this.authService.resetPassword({
+        email: this.email,
+        resetToken: this.resetToken,
+        newPassword: this.newPassword,
+      });
 
       if (resetPasswordResponse?.success) {
         this.notification.success('Success', 'Password reset successfully');

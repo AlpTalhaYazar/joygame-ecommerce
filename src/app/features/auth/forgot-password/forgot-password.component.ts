@@ -43,9 +43,9 @@ export class ForgotPasswordComponent {
   async onSubmit(): Promise<void> {
     this.isLoading = true;
     try {
-      var forgotPasswordResponse = await this.authService
-        .forgotPassword(this.email)
-        .toPromise();
+      var forgotPasswordResponse = await this.authService.forgotPassword(
+        this.email
+      );
 
       if (forgotPasswordResponse?.success) {
         this.notification.success(
@@ -53,7 +53,10 @@ export class ForgotPasswordComponent {
           'Password reset instructions sent to your email'
         );
         this.router.navigate(['/reset-password'], {
-          state: { email: this.email, resetToken: forgotPasswordResponse.data?.resetToken },
+          state: {
+            email: this.email,
+            resetToken: forgotPasswordResponse.data?.resetToken,
+          },
         });
       }
     } catch (error: any) {
