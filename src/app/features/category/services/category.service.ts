@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { catchError, map } from 'rxjs';
+import { catchError, lastValueFrom, map, Observable } from 'rxjs';
 
 import { ApiResult } from '../../../core/models/apiResult';
 import { environment } from '../../../../environments/environment';
@@ -21,30 +21,21 @@ export class CategoryService {
 
   constructor(private http: HttpClient) {}
 
-  getCategories() {
-    return this.http.get<ApiResult<Category[]>>(this.apiCategoryBaseUrl).pipe(
-      map((response: ApiResult<Category[]>) => {
-        return response;
-      }),
-      catchError((error) => {
-        throw error;
-      })
+  async getCategories(): Promise<ApiResult<Category[]>> {
+    var response = this.http.get<ApiResult<Category[]>>(
+      this.apiCategoryBaseUrl
     );
+    return await lastValueFrom(response);
   }
 
-  getCategoryBySlug(slug: string) {
-    return this.http
-      .get<ApiResult<CategoryWithHierarchy>>(
-        `${this.apiCategoryBaseUrl}/${slug}`
-      )
-      .pipe(
-        map((response: ApiResult<CategoryWithHierarchy>) => {
-          return response;
-        }),
-        catchError((error) => {
-          throw error;
-        })
-      );
+  async getCategoryBySlug(
+    slug: string
+  ): Promise<ApiResult<CategoryWithHierarchy>> {
+    var response = this.http.get<ApiResult<CategoryWithHierarchy>>(
+      `${this.apiCategoryBaseUrl}/${slug}`
+    );
+
+    return await lastValueFrom(response);
   }
 
   getCategoryTree(slug: string) {

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { catchError, map } from 'rxjs';
+import { catchError, map, Observable } from 'rxjs';
 
 import { environment } from '../../../../environments/environment';
 import { ApiResult, PaginationApiResult } from '../../../core/models/apiResult';
@@ -67,7 +67,7 @@ export class ProductService {
     pageSize: number,
     categoryId: number | null,
     searchText: string | null
-  ) {
+  ): Observable<PaginationApiResult<any>> {
     const params: any = {
       page: page.toString(),
       pageSize: pageSize.toString(),
@@ -81,17 +81,11 @@ export class ProductService {
       params['searchText'] = searchText;
     }
 
-    return this.http
-      .get<PaginationApiResult<any>>(this.getProductsWithCategoriesEndpoint, {
+    return this.http.get<PaginationApiResult<any>>(
+      this.getProductsWithCategoriesEndpoint,
+      {
         params,
-      })
-      .pipe(
-        map((response: PaginationApiResult<any>) => {
-          return response;
-        }),
-        catchError((error) => {
-          throw error;
-        })
-      );
+      }
+    );
   }
 }

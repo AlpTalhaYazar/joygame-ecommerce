@@ -1,6 +1,6 @@
 import { FormsModule } from '@angular/forms';
 import { NgForOf, NgIf } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 
 import { NzSpinComponent } from 'ng-zorro-antd/spin';
 import { NzEmptyComponent } from 'ng-zorro-antd/empty';
@@ -75,7 +75,8 @@ export class ProductListComponent implements OnInit {
     private authService: AuthService,
     private productService: ProductService,
     private categoryService: CategoryService,
-    private notification: NzNotificationService
+    private notification: NzNotificationService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -85,58 +86,50 @@ export class ProductListComponent implements OnInit {
 
   async loadProducts(): Promise<void> {
     this.loading = true;
-    this.productService
+    var response = await this.productService
       .getProductsWithCategories(
         this.pageIndex,
         this.pageSize,
         this.selectedCategory,
         this.searchText
       )
-      .subscribe({
-        next: (response) => {
-          if (response.success) {
-            this.products = response.data;
-            this.filteredProducts = this.products;
-            this.total = response.pagination?.totalCount ?? 0;
-          } else {
-            this.notification.error(
-              'Failed to load products',
-              response?.error?.message ??
-                'An error occurred while loading products'
-            );
-          }
-        },
-        error: (error) => {
-          this.notification.error(
-            'Failed to load products',
-            'An error occurred while loading products'
-          );
-          console.error('Error loading products:', error);
-        },
-        complete: () => {
-          this.loading = false;
-        },
-      });
+      .toPromise();
+
+    if (response?.success) {
+      this.products = response.data;
+      this.filteredProducts = this.products;
+      this.total = response.pagination?.totalCount ?? 0;
+    } else {
+      this.notification.error(
+        'Error',
+        response?.error?.message || 'An error occurred'
+      );
+    }
+
+    this.loading = false;
   }
 
   async loadCategories(): Promise<void> {
     this.loading = true;
-    this.categoryService.getCategories().subscribe({
-      next: (response) => {
-        if (response.success) {
-          this.parentCategories =
-            response.data
-              ?.filter((category) => category.parentId === null)
-              .map((category) => ({ id: category.id, name: category.name })) ??
-            [];
-          this.childCategories =
-            response.data
-              ?.filter((category) => category.parentId !== null)
-              .map((category) => ({ id: category.id, name: category.name })) ??
-            [];
-        }
-      },
-    });
+    var response = await this.categoryService.getCategories();
+
+    if (response?.success && response.data) {
+      this.parentCategories =
+        response.data
+          ?.filter((category) => category.parentId === null)
+          .map((category) => ({ id: category.id, name: category.name })) ?? [];
+      this.childCategories =
+        response.data
+          ?.filter((category) => category.parentId !== null)
+          .map((category) => ({ id: category.id, name: category.name })) ?? [];
+    } else {
+      this.notification.error(
+        'Error',
+        response?.error?.message || 'An error occurred'
+      );
+    }
+
+    this.loading = false;
   }
 
   async onSearch(): Promise<void> {
