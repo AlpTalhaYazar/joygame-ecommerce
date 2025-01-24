@@ -10,8 +10,11 @@
     <div class="flex flex-col justify-between h-full">
       <div>
         <div class="sidebar-logo">
-          <a href="https://ng.ant.design/" target="_blank">
-            <img src="https://ng.ant.design/assets/img/logo.svg" alt="logo" />
+          <a href="https://www.joygame.com/hakkimizda" target="_blank">
+            <img
+              src="assets/images/JoyGameIcon.png"
+              alt="Joyful E-Commerce"
+            />
             <h1>Joyful E-Commerce</h1>
           </a>
         </div>
@@ -28,14 +31,26 @@
               </li>
             </ul>
           </li>
-          <li nz-submenu nzOpen nzTitle="Product" nzIcon="product" *ngIf="isLoggedIn">
+          <li
+            nz-submenu
+            nzOpen
+            nzTitle="Product"
+            nzIcon="product"
+            *ngIf="isLoggedIn"
+          >
             <ul>
               <li nz-menu-item nzMatchRouter>
                 <a routerLink="app/products">Product List</a>
               </li>
             </ul>
           </li>
-          <li nz-submenu nzOpen nzTitle="Category" nzIcon="ordered-list" *ngIf="isLoggedIn">
+          <li
+            nz-submenu
+            nzOpen
+            nzTitle="Category"
+            nzIcon="ordered-list"
+            *ngIf="isLoggedIn"
+          >
             <ul>
               <li nz-menu-item nzMatchRouter>
                 <a routerLink="app/categories">Category List</a>
@@ -45,7 +60,10 @@
         </ul>
       </div>
 
-      <div class="flex justify-center w-full py-4" [class.collapsed]="isCollapsed">
+      <div
+        class="flex justify-center w-full py-4"
+        [class.collapsed]="isCollapsed"
+      >
         <div *ngIf="!isLoggedIn" class="login-section">
           <button nz-button nzType="primary" routerLink="/login">
             <span nz-icon nzType="login"></span>
@@ -58,12 +76,9 @@
             class="user-info flex gap-2 items-center"
             [class.collapsed]="isCollapsed"
           >
-            <nz-avatar
-              [nzSize]="32"
-              nzIcon="user"
-            ></nz-avatar>
+            <nz-avatar [nzSize]="32" nzIcon="user"></nz-avatar>
             <span class="username text-white" *ngIf="!isCollapsed">{{
-              firstName + ' ' + lastName
+              firstName + " " + lastName
             }}</span>
           </div>
           <button
