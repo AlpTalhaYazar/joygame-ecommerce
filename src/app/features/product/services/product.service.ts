@@ -10,15 +10,15 @@ import { ApiResult, PaginationApiResult } from '../../../core/models/apiResult';
   providedIn: 'root',
 })
 export class ProductService {
-  apiProductBaseUrl = `${environment.apiUrl}/api/product`;
-  getProductByCategoryIdEndpoint = `${this.apiProductBaseUrl}/category`;
-  getProductByIdDetailedEndpoint = `${this.apiProductBaseUrl}/detailed`;
-  getProductsWithCategoriesEndpoint = `${this.apiProductBaseUrl}/with-categories`;
+  private productBaseUrl = `${environment.apiUrl}/api/product`;
+  private getProductByCategoryIdEndpoint = `${this.productBaseUrl}/category`;
+  private getProductByIdDetailedEndpoint = `${this.productBaseUrl}/detailed`;
+  private getProductsWithCategoriesEndpoint = `${this.productBaseUrl}/with-categories`;
 
   constructor(private http: HttpClient) {}
 
   async getProducts() {
-    var response = this.http.get(this.apiProductBaseUrl);
+    var response = this.http.get(this.productBaseUrl);
 
     return await lastValueFrom(response);
   }
@@ -41,7 +41,7 @@ export class ProductService {
 
   async getProductBySlugDetail(slug: string) {
     var response = this.http.get<ApiResult<any>>(
-      `${this.apiProductBaseUrl}/${slug}`
+      `${this.productBaseUrl}/${slug}`
     );
 
     return await lastValueFrom(response);

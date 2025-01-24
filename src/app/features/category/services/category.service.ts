@@ -15,16 +15,14 @@ import {
   providedIn: 'root',
 })
 export class CategoryService {
-  apiCategoryBaseUrl = `${environment.apiUrl}/api/category`;
-  getCategoriesHierarchyEndpoint = `${this.apiCategoryBaseUrl}/hierarchy`;
-  getCategoryTreeEndpoint = `${this.apiCategoryBaseUrl}/tree`;
+  private categoryBaseUrl = `${environment.apiUrl}/api/category`;
+  private getCategoriesHierarchyEndpoint = `${this.categoryBaseUrl}/hierarchy`;
+  private getCategoryTreeEndpoint = `${this.categoryBaseUrl}/tree`;
 
   constructor(private http: HttpClient) {}
 
   async getCategories(): Promise<ApiResult<Category[]>> {
-    var response = this.http.get<ApiResult<Category[]>>(
-      this.apiCategoryBaseUrl
-    );
+    var response = this.http.get<ApiResult<Category[]>>(this.categoryBaseUrl);
     return await lastValueFrom(response);
   }
 
@@ -32,7 +30,7 @@ export class CategoryService {
     slug: string
   ): Promise<ApiResult<CategoryWithHierarchy>> {
     var response = this.http.get<ApiResult<CategoryWithHierarchy>>(
-      `${this.apiCategoryBaseUrl}/${slug}`
+      `${this.categoryBaseUrl}/${slug}`
     );
 
     return await lastValueFrom(response);

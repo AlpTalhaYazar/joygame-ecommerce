@@ -3,16 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
-import { last, map } from 'rxjs/operators';
-import { catchError } from 'rxjs/operators';
-import {
-  interval,
-  takeWhile,
-  throwError,
-  Observable,
-  lastValueFrom,
-  BehaviorSubject,
-} from 'rxjs';
+import { lastValueFrom, BehaviorSubject } from 'rxjs';
 
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 
@@ -35,6 +26,11 @@ export class AuthService {
 
   currentUser$ = this.currentUserSubject.asObservable();
 
+  private authBaseUrl = `${environment.apiUrl}/api/auth`;
+  private loginUrl = `${this.authBaseUrl}/login`;
+  private forgotPasswordUrl = `${this.authBaseUrl}/forgot-password`;
+  private resetPasswordUrl = `${this.authBaseUrl}/reset-password`;
+
   constructor(
     private http: HttpClient,
     private notification: NzNotificationService,
@@ -49,7 +45,7 @@ export class AuthService {
 
   async login(credentials: LoginRequest): Promise<ApiResult<AuthResponseDto>> {
     var response = this.http.post<ApiResult<AuthResponseDto>>(
-      `${environment.apiUrl}/api/auth/login`,
+      this.loginUrl,
       credentials
     );
 
@@ -60,7 +56,7 @@ export class AuthService {
     email: string
   ): Promise<ApiResult<ForgotPasswordResponse>> {
     var response = this.http.post<ApiResult<ForgotPasswordResponse>>(
-      `${environment.apiUrl}/api/auth/forgot-password`,
+      this.forgotPasswordUrl,
       { email }
     );
 
@@ -71,7 +67,7 @@ export class AuthService {
     request: ResetPasswordRequest
   ): Promise<ApiResult<boolean>> {
     var response = this.http.post<ApiResult<boolean>>(
-      `${environment.apiUrl}/api/auth/reset-password`,
+      this.resetPasswordUrl,
       request
     );
 
@@ -88,6 +84,8 @@ export class AuthService {
     localStorage.removeItem('token');
     localStorage.removeItem('currentUser');
     this.currentUserSubject.next(null);
+
+    this.router.navigate(['/login']);
   }
 
   hasPermission(permission: string): boolean {
